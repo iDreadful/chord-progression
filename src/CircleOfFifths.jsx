@@ -109,7 +109,6 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
           textTransform: 'none',
           fontWeight: 600,
           padding: '10px 20px',
@@ -137,7 +136,6 @@ const theme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
           fontWeight: 600,
           height: 32,
         },
@@ -147,12 +145,13 @@ const theme = createTheme({
       },
     },
     MuiPaper: {
+      defaultProps: { style: { borderRadius: 20 } },
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          background: 'linear-gradient(145deg, #1a1a3a 0%, #252547 100%)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(99, 102, 241, 0.1)',
+          borderRadius: 4,
+          // background: 'linear-gradient(145deg, #1a1a3a 0%, #252547 100%)',
+          // backdropFilter: 'blur(10px)',
+          // border: '1px solid rgba(99, 102, 241, 0.1)',
         },
       },
     },
@@ -686,345 +685,270 @@ const CircleOfFifths = () => {
     })
 
     return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <svg width="500" height="500">
-          <defs>
-            <linearGradient
-              id="primaryGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#6366f1', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#4f46e5', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="successGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#10b981', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#059669', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="warningGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#f59e0b', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#d97706', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="darkGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#1a1a3a', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#2d1b69', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="keyGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#374151', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#1f2937', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="selectedKeyGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#6366f1', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#4f46e5', stopOpacity: 1 }}
-              />
-            </linearGradient>
-            <linearGradient
-              id="goldGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: '#fbbf24', stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: '#d97706', stopOpacity: 1 }}
-              />
-            </linearGradient>
-          </defs>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'relative',
+          width: 500,
+          height: 500,
+          margin: '0 auto',
+        }}
+      >
+        {/* Background circles */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 500,
+            height: 500,
+            pointerEvents: 'none',
+          }}
+        >
           {/* Outer circle */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius + 60}
-            fill="none"
-            stroke="rgba(99, 102, 241, 0.3)"
-            strokeWidth="2"
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 50,
+              left: 50,
+              width: 400,
+              height: 400,
+              borderRadius: '50%',
+              border: '2px solid rgba(99, 102, 241, 0.3)',
+            }}
           />
 
-          {/* Middle circle for chord root highlights */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius + 15}
-            fill="none"
-            stroke="rgba(99, 102, 241, 0.2)"
-            strokeWidth="1"
+          {/* Middle circle */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: 280,
+              height: 280,
+              width: 280,
+              height: 280,
+              borderRadius: '50%',
+              translate: '-50% -50%',
+              border: '1px solid rgba(99, 102, 241, 0.2)',
+            }}
           />
 
           {/* Inner circle */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius - 30}
-            fill="none"
-            stroke="rgba(99, 102, 241, 0.3)"
-            strokeWidth="2"
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 170,
+              left: 170,
+              width: 160,
+              height: 160,
+              borderRadius: '50%',
+              border: '2px solid rgba(99, 102, 241, 0.3)',
+            }}
           />
+        </Box>
 
-          {/* Draw chord root highlights in middle ring */}
-          {keys.map((key, index) => {
-            const angle = index * 30 - 90
-            const radian = (angle * Math.PI) / 180
-            const highlightRadius = radius + 15
-            const x = centerX + highlightRadius * Math.cos(radian)
-            const y = centerY + highlightRadius * Math.sin(radian)
+        {/* Chord positions in inner circle */}
+        {currentChords.notes.map((chord, index) => {
+          const chordRadius = radius - 60
 
-            const keyRoot = key.replace('m', '')
-            const isChordRoot = chordRoots.includes(keyRoot)
+          // Find the position of the selected key in the outer circle
+          const keys = getCurrentKeys()
+          const selectedKeyIndex = keys.indexOf(selectedKey)
+          const selectedKeyAngle = selectedKeyIndex * 30 - 90 // Angle of selected key
 
-            if (isChordRoot) {
-              // Find which chord degree this represents
-              const chordIndex = currentChords.notes.findIndex(
-                chord =>
-                  getChordRoot(chord).replace(/[#b]/g, '') ===
-                    keyRoot.replace(/[#b]/g, '') ||
-                  getChordRoot(chord) === keyRoot
-              )
+          // Calculate angle for this chord, with tonic (index 0) aligned to selected key
+          const chordAngle = selectedKeyAngle + index * 51.43 // 360/7 = 51.43 degrees apart
+          const radian = (chordAngle * Math.PI) / 180
+          const x = centerX + chordRadius * Math.cos(radian)
+          const y = centerY + chordRadius * Math.sin(radian)
 
-              return (
-                <g key={`highlight-${key}`}>
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r="12"
-                    fill="url(#goldGradient)"
-                    stroke="#d97706"
-                    strokeWidth="2"
-                  />
-                  <text
-                    x={x}
-                    y={y + 3}
-                    textAnchor="middle"
-                    className="text-xs font-bold fill-yellow-100 select-none"
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    {chordIndex >= 0 ? currentChords.roman[chordIndex] : ''}
-                  </text>
-                </g>
-              )
-            }
-            return null
-          })}
+          const romanNumeral = currentChords.roman[index]
+          const isSelected = selectedChord === romanNumeral
+          const suggestions = selectedChord
+            ? getNextChordSuggestions(selectedChord)
+            : null
+          const isStrongSuggestion =
+            suggestions && suggestions.strong.includes(romanNumeral)
+          const isWeakSuggestion =
+            suggestions && suggestions.weak.includes(romanNumeral)
 
-          {/* Draw chord positions in inner circle */}
-          {currentChords.notes.map((chord, index) => {
-            const chordRadius = radius - 60
+          let backgroundColor =
+            'linear-gradient(145deg, #1a1a3a 0%, #2d1b69 100%)'
+          let borderColor = '#6366f1'
 
-            // Find the position of the selected key in the outer circle
-            const keys = getCurrentKeys()
-            const selectedKeyIndex = keys.indexOf(selectedKey)
-            const selectedKeyAngle = selectedKeyIndex * 30 - 90 // Angle of selected key
+          if (isSelected) {
+            backgroundColor =
+              'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
+            borderColor = '#4f46e5'
+          } else if (isStrongSuggestion) {
+            backgroundColor =
+              'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+            borderColor = '#059669'
+          } else if (isWeakSuggestion) {
+            backgroundColor =
+              'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+            borderColor = '#d97706'
+          }
 
-            // Calculate angle for this chord, with tonic (index 0) aligned to selected key
-            const chordAngle = selectedKeyAngle + index * 51.43 // 360/7 = 51.43 degrees apart
-            const radian = (chordAngle * Math.PI) / 180
-            const x = centerX + chordRadius * Math.cos(radian)
-            const y = centerY + chordRadius * Math.sin(radian)
+          return (
+            <Button
+              key={`chord-${index}`}
+              variant="contained"
+              sx={{
+                position: 'absolute',
+                top: y - 18,
+                left: x - 18,
+                width: 36,
+                height: 36,
+                minWidth: 36,
+                borderRadius: '50%',
+                background: backgroundColor,
+                border: `2px solid ${borderColor}`,
+                padding: 0,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                  boxShadow: `0 4px 20px ${borderColor}40`,
+                },
+              }}
+              onMouseEnter={() => playChordPreview(chord, romanNumeral)}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => recordChord(chord, romanNumeral)}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  fontSize: '8px',
+                  fontWeight: 'semibold',
+                  color: 'white',
+                  lineHeight: 1,
+                  userSelect: 'none',
+                  marginBottom: '-2px',
+                }}
+              >
+                {romanNumeral}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  fontSize: '7px',
+                  fontWeight: 'medium',
+                  color: 'white',
+                  lineHeight: 1,
+                  userSelect: 'none',
+                }}
+              >
+                {chord}
+              </Typography>
+            </Button>
+          )
+        })}
 
-            const romanNumeral = currentChords.roman[index]
-            const isSelected = selectedChord === romanNumeral
-            const suggestions = selectedChord
-              ? getNextChordSuggestions(selectedChord)
-              : null
-            const isStrongSuggestion =
-              suggestions && suggestions.strong.includes(romanNumeral)
-            const isWeakSuggestion =
-              suggestions && suggestions.weak.includes(romanNumeral)
+        {/* Key positions in outer circle */}
+        {keys.map((key, index) => {
+          const angle = index * 30 - 90 // Start from top, 30 degrees apart
+          const radian = (angle * Math.PI) / 180
+          const x = centerX + radius * Math.cos(radian)
+          const y = centerY + radius * Math.sin(radian)
 
-            let fillColor = 'url(#darkGradient)'
-            let strokeColor = '#6366f1'
-            let textClass = 'fill-indigo-300'
+          const isSelected = key === selectedKey
+          const keyRoot = key.replace('m', '')
+          const isChordRoot = chordRoots.includes(keyRoot)
 
-            if (isSelected) {
-              fillColor = 'url(#primaryGradient)'
-              strokeColor = '#4f46e5'
-              textClass = 'fill-white'
-            } else if (isStrongSuggestion) {
-              fillColor = 'url(#successGradient)'
-              strokeColor = '#059669'
-              textClass = 'fill-green-100'
-            } else if (isWeakSuggestion) {
-              fillColor = 'url(#warningGradient)'
-              strokeColor = '#d97706'
-              textClass = 'fill-yellow-100'
-            }
+          let backgroundColor =
+            'linear-gradient(145deg, #374151 0%, #1f2937 100%)'
+          let borderColor = 'rgba(99, 102, 241, 0.3)'
 
-            return (
-              <g key={`chord-${index}`}>
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="18"
-                  fill={fillColor}
-                  stroke={strokeColor}
-                  strokeWidth="2"
-                  style={{ cursor: 'pointer', transition: 'all 0.2s' }}
-                  onMouseEnter={() => playChordPreview(chord, romanNumeral)}
-                  onMouseLeave={handleMouseLeave}
-                  onClick={() => recordChord(chord, romanNumeral)}
-                />
-                <text
-                  x={x}
-                  y={y - 5}
-                  textAnchor="middle"
-                  className={`text-xs font-semibold select-none ${textClass}`}
-                  style={{ pointerEvents: 'none' }}
-                >
-                  {romanNumeral}
-                </text>
-                <text
-                  x={x}
-                  y={y + 8}
-                  textAnchor="middle"
-                  className={`text-xs font-medium select-none ${textClass}`}
-                  style={{ pointerEvents: 'none' }}
-                >
-                  {chord}
-                </text>
-              </g>
-            )
-          })}
+          if (isSelected) {
+            backgroundColor =
+              'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
+            borderColor = '#4f46e5'
+          } else if (isChordRoot) {
+            backgroundColor =
+              'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)'
+            borderColor = '#d97706'
+          }
 
-          {/* Draw key positions in outer circle */}
-          {keys.map((key, index) => {
-            const angle = index * 30 - 90 // Start from top, 30 degrees apart
-            const radian = (angle * Math.PI) / 180
-            const x = centerX + radius * Math.cos(radian)
-            const y = centerY + radius * Math.sin(radian)
+          return (
+            <Button
+              key={key}
+              variant="contained"
+              sx={{
+                position: 'absolute',
+                top: y - 25,
+                left: x - 25,
+                width: 50,
+                height: 50,
+                minWidth: 50,
+                borderRadius: '50%',
+                background: backgroundColor,
+                border: `2px solid ${borderColor}`,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: `0 4px 20px ${borderColor}40`,
+                },
+              }}
+              onClick={() => handleKeyClick(key)}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: '14px',
+                  fontWeight: 'semibold',
+                  color: 'white',
+                  userSelect: 'none',
+                }}
+              >
+                {key}
+              </Typography>
+            </Button>
+          )
+        })}
 
-            const isSelected = key === selectedKey
-            const keyRoot = key.replace('m', '')
-            const isChordRoot = chordRoots.includes(keyRoot)
-
-            return (
-              <g key={key}>
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="25"
-                  fill={
-                    isSelected
-                      ? 'url(#selectedKeyGradient)'
-                      : isChordRoot
-                      ? 'url(#goldGradient)'
-                      : 'url(#keyGradient)'
-                  }
-                  stroke={
-                    isSelected
-                      ? '#4f46e5'
-                      : isChordRoot
-                      ? '#d97706'
-                      : 'rgba(99, 102, 241, 0.3)'
-                  }
-                  strokeWidth="2"
-                  style={{ cursor: 'pointer', transition: 'all 0.2s' }}
-                  onClick={() => handleKeyClick(key)}
-                />
-                <text
-                  x={x}
-                  y={y + 5}
-                  textAnchor="middle"
-                  className="text-sm font-semibold select-none fill-white"
-                  style={{ pointerEvents: 'none' }}
-                >
-                  {key}
-                </text>
-              </g>
-            )
-          })}
-
-          {/* Center label */}
-          <text
-            x={centerX}
-            y={centerY - 10}
-            textAnchor="middle"
-            className="text-base font-bold select-none"
-            style={{ pointerEvents: 'none', fill: '#f8fafc' }}
+        {/* Center label */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: centerY - 20,
+            left: centerX - 60,
+            width: 120,
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              color: '#f8fafc',
+              userSelect: 'none',
+              lineHeight: 1.2,
+            }}
           >
             Key of {selectedKey}
-          </text>
-          <text
-            x={centerX}
-            y={centerY + 10}
-            textAnchor="middle"
-            className="text-sm font-medium select-none capitalize"
-            style={{ pointerEvents: 'none', fill: '#cbd5e1' }}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 'medium',
+              color: '#cbd5e1',
+              userSelect: 'none',
+              textTransform: 'capitalize',
+            }}
           >
             {keyType}
-          </text>
-        </svg>
-      </div>
+          </Typography>
+        </Box>
+      </Box>
     )
   }
 
@@ -1038,7 +962,7 @@ const CircleOfFifths = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
+              gridTemplateColumns: '1fr 1fr 1fr',
               gap: '32px',
               marginBottom: '32px',
             }}
@@ -1137,6 +1061,283 @@ const CircleOfFifths = () => {
                     </Typography>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Second Row: Chord Progression Section - Full Width */}
+            <Card>
+              <CardContent sx={{ p: 3 }}>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{
+                    mb: 3,
+                    background:
+                      'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  Chords & Progressions
+                </Typography>
+
+                <Box sx={{ mb: 4 }}>
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{
+                      textAlign: 'center',
+                      mb: 4,
+                      background:
+                        'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    Key of {selectedKey} ({keyType})
+                  </Typography>
+
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    {currentChords.roman.map((romanNumeral, index) => {
+                      const chordNote = currentChords.notes[index]
+                      const isSelected = selectedChord === romanNumeral
+                      const suggestions = selectedChord
+                        ? getNextChordSuggestions(selectedChord)
+                        : null
+                      const isStrongSuggestion =
+                        suggestions && suggestions.strong.includes(romanNumeral)
+                      const isWeakSuggestion =
+                        suggestions && suggestions.weak.includes(romanNumeral)
+
+                      let backgroundColor =
+                        'linear-gradient(145deg, #1a1a3a 0%, #2d1b69 100%)'
+                      let borderColor = '#6366f1'
+                      let variant = 'outlined'
+
+                      if (isSelected) {
+                        backgroundColor =
+                          'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
+                        borderColor = '#4f46e5'
+                        variant = 'contained'
+                      } else if (isStrongSuggestion) {
+                        backgroundColor =
+                          'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                        borderColor = '#059669'
+                        variant = 'contained'
+                      } else if (isWeakSuggestion) {
+                        backgroundColor =
+                          'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+                        borderColor = '#d97706'
+                        variant = 'contained'
+                      }
+
+                      return (
+                        <Button
+                          key={`chord-${index}`}
+                          variant={variant}
+                          sx={{
+                            minWidth: '80px',
+                            p: 2,
+                            flexDirection: 'column',
+                            textTransform: 'none',
+                            background: backgroundColor,
+                            border: `2px solid ${borderColor}`,
+                            color: 'white',
+                            '&:hover': {
+                              background: backgroundColor,
+                              transform: 'scale(1.05)',
+                              boxShadow: `0 4px 20px ${borderColor}40`,
+                            },
+                          }}
+                          onMouseEnter={() =>
+                            playChordPreview(chordNote, romanNumeral)
+                          }
+                          onMouseLeave={handleMouseLeave}
+                          onClick={() => recordChord(chordNote, romanNumeral)}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{ mb: 0.5, color: 'white' }}
+                          >
+                            {chordNote}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ opacity: 0.8, color: 'white' }}
+                          >
+                            {romanNumeral}
+                          </Typography>
+                        </Button>
+                      )
+                    })}
+                  </Box>
+                </Box>
+
+                {selectedChord && (
+                  <Paper
+                    sx={{
+                      p: 3,
+                      borderRadius: 4,
+                      mb: 4,
+                      background:
+                        'linear-gradient(145deg, #2d1b69 0%, #3730a3 100%)',
+                      border: '1px solid rgba(99, 102, 241, 0.2)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      component="h3"
+                      sx={{
+                        fontWeight: 600,
+                        mb: 2,
+                      }}
+                    >
+                      Next Chord Suggestions for {selectedChord}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: '#d1d5db',
+                        mb: 2,
+                      }}
+                    >
+                      {getNextChordSuggestions(selectedChord).description}
+                    </Typography>
+
+                    <Box>
+                      {getNextChordSuggestions(selectedChord).strong.length >
+                        0 && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            mb: 1,
+                          }}
+                        >
+                          <Chip
+                            label="STRONG"
+                            size="small"
+                            color="success"
+                            sx={{ fontWeight: 600 }}
+                          />
+                          <Typography variant="body2">
+                            {getNextChordSuggestions(selectedChord).strong.map(
+                              (chord, index) => {
+                                const chordIndex =
+                                  currentChords.roman.indexOf(chord)
+                                const chordName =
+                                  chordIndex >= 0
+                                    ? currentChords.notes[chordIndex]
+                                    : ''
+                                return (
+                                  <span key={chord}>
+                                    {chord} ({chordName})
+                                    {index <
+                                    getNextChordSuggestions(selectedChord)
+                                      .strong.length -
+                                      1
+                                      ? ', '
+                                      : ''}
+                                  </span>
+                                )
+                              }
+                            )}
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {getNextChordSuggestions(selectedChord).weak.length >
+                        0 && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          <Chip
+                            label="WEAK"
+                            size="small"
+                            color="warning"
+                            sx={{ fontWeight: 600 }}
+                          />
+                          <Typography variant="body2">
+                            {getNextChordSuggestions(selectedChord).weak.map(
+                              (chord, index) => {
+                                const chordIndex =
+                                  currentChords.roman.indexOf(chord)
+                                const chordName =
+                                  chordIndex >= 0
+                                    ? currentChords.notes[chordIndex]
+                                    : ''
+                                return (
+                                  <span key={chord}>
+                                    {chord} ({chordName})
+                                    {index <
+                                    getNextChordSuggestions(selectedChord).weak
+                                      .length -
+                                      1
+                                      ? ', '
+                                      : ''}
+                                  </span>
+                                )
+                              }
+                            )}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  </Paper>
+                )}
+
+                <Paper
+                  sx={{
+                    p: 2,
+                    borderRadius: 4,
+                    background:
+                      'linear-gradient(145deg, #1f2937 0%, #374151 100%)',
+                    border: '1px solid rgba(99, 102, 241, 0.1)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{
+                      fontWeight: 600,
+                      mb: 1.5,
+                    }}
+                  >
+                    Interactive Features
+                  </Typography>
+                  <Box sx={{ color: '#cbd5e1' }}>
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      🎵 <strong>Hover any chord</strong> to preview •{' '}
+                      <strong>Click to record</strong>
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      🟢 <strong>Green highlight:</strong> Strong next chord
+                      suggestions
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      🟡 <strong>Yellow highlight:</strong> Weaker but valid
+                      progressions
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      🔵 <strong>Blue highlight:</strong> Currently selected
+                      chord
+                    </Typography>
+                    <Typography variant="body2">
+                      🎼 <strong>Sequence:</strong> Click records to highlighted
+                      position
+                    </Typography>
+                  </Box>
+                </Paper>
               </CardContent>
             </Card>
 
@@ -1331,258 +1532,6 @@ const CircleOfFifths = () => {
               </CardContent>
             </Card>
           </div>
-
-          {/* Second Row: Chord Progression Section - Full Width */}
-          <Card>
-            <CardContent sx={{ p: 3 }}>
-              <Typography
-                variant="h4"
-                component="h2"
-                sx={{
-                  textAlign: 'center',
-                  mb: 4,
-                  background:
-                    'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Key of {selectedKey} ({keyType})
-              </Typography>
-
-              <Box sx={{ mb: 4 }}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  sx={{
-                    fontWeight: 600,
-                    mb: 2,
-                  }}
-                >
-                  Chords & Progressions
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                  {currentChords.roman.map((romanNumeral, index) => {
-                    const chordNote = currentChords.notes[index]
-                    const isSelected = selectedChord === romanNumeral
-                    const suggestions = selectedChord
-                      ? getNextChordSuggestions(selectedChord)
-                      : null
-                    const isStrongSuggestion =
-                      suggestions && suggestions.strong.includes(romanNumeral)
-                    const isWeakSuggestion =
-                      suggestions && suggestions.weak.includes(romanNumeral)
-
-                    let color = 'primary'
-                    let variant = 'outlined'
-
-                    if (isSelected) {
-                      variant = 'contained'
-                      color = 'primary'
-                    } else if (isStrongSuggestion) {
-                      variant = 'contained'
-                      color = 'success'
-                    } else if (isWeakSuggestion) {
-                      variant = 'contained'
-                      color = 'warning'
-                    }
-
-                    return (
-                      <Button
-                        key={`chord-${index}`}
-                        variant={variant}
-                        color={color}
-                        sx={{
-                          minWidth: '80px',
-                          p: 2,
-                          flexDirection: 'column',
-                          textTransform: 'none',
-                        }}
-                        onMouseEnter={() =>
-                          playChordPreview(chordNote, romanNumeral)
-                        }
-                        onMouseLeave={handleMouseLeave}
-                        onClick={() => recordChord(chordNote, romanNumeral)}
-                      >
-                        <Typography
-                          variant="h6"
-                          component="div"
-                          sx={{ mb: 0.5 }}
-                        >
-                          {chordNote}
-                        </Typography>
-                        <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                          {romanNumeral}
-                        </Typography>
-                      </Button>
-                    )
-                  })}
-                </Box>
-              </Box>
-
-              {selectedChord && (
-                <Paper
-                  sx={{
-                    p: 3,
-                    borderRadius: 4,
-                    mb: 4,
-                    background:
-                      'linear-gradient(145deg, #2d1b69 0%, #3730a3 100%)',
-                    border: '1px solid rgba(99, 102, 241, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    component="h3"
-                    sx={{
-                      fontWeight: 600,
-                      mb: 2,
-                    }}
-                  >
-                    Next Chord Suggestions for {selectedChord}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#d1d5db',
-                      mb: 2,
-                    }}
-                  >
-                    {getNextChordSuggestions(selectedChord).description}
-                  </Typography>
-
-                  <Box>
-                    {getNextChordSuggestions(selectedChord).strong.length >
-                      0 && (
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 1,
-                          mb: 1,
-                        }}
-                      >
-                        <Chip
-                          label="STRONG"
-                          size="small"
-                          color="success"
-                          sx={{ fontWeight: 600 }}
-                        />
-                        <Typography variant="body2">
-                          {getNextChordSuggestions(selectedChord).strong.map(
-                            (chord, index) => {
-                              const chordIndex =
-                                currentChords.roman.indexOf(chord)
-                              const chordName =
-                                chordIndex >= 0
-                                  ? currentChords.notes[chordIndex]
-                                  : ''
-                              return (
-                                <span key={chord}>
-                                  {chord} ({chordName})
-                                  {index <
-                                  getNextChordSuggestions(selectedChord).strong
-                                    .length -
-                                    1
-                                    ? ', '
-                                    : ''}
-                                </span>
-                              )
-                            }
-                          )}
-                        </Typography>
-                      </Box>
-                    )}
-
-                    {getNextChordSuggestions(selectedChord).weak.length > 0 && (
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 1,
-                        }}
-                      >
-                        <Chip
-                          label="WEAK"
-                          size="small"
-                          color="warning"
-                          sx={{ fontWeight: 600 }}
-                        />
-                        <Typography variant="body2">
-                          {getNextChordSuggestions(selectedChord).weak.map(
-                            (chord, index) => {
-                              const chordIndex =
-                                currentChords.roman.indexOf(chord)
-                              const chordName =
-                                chordIndex >= 0
-                                  ? currentChords.notes[chordIndex]
-                                  : ''
-                              return (
-                                <span key={chord}>
-                                  {chord} ({chordName})
-                                  {index <
-                                  getNextChordSuggestions(selectedChord).weak
-                                    .length -
-                                    1
-                                    ? ', '
-                                    : ''}
-                                </span>
-                              )
-                            }
-                          )}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-                </Paper>
-              )}
-
-              <Paper
-                sx={{
-                  p: 2,
-                  borderRadius: 4,
-                  background:
-                    'linear-gradient(145deg, #1f2937 0%, #374151 100%)',
-                  border: '1px solid rgba(99, 102, 241, 0.1)',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  component="h4"
-                  sx={{
-                    fontWeight: 600,
-                    mb: 1.5,
-                  }}
-                >
-                  Interactive Features
-                </Typography>
-                <Box sx={{ color: '#cbd5e1' }}>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    🎵 <strong>Hover any chord</strong> to preview •{' '}
-                    <strong>Click to record</strong>
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    🟢 <strong>Green highlight:</strong> Strong next chord
-                    suggestions
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    🟡 <strong>Yellow highlight:</strong> Weaker but valid
-                    progressions
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    🔵 <strong>Blue highlight:</strong> Currently selected chord
-                  </Typography>
-                  <Typography variant="body2">
-                    🎼 <strong>Sequence:</strong> Click records to highlighted
-                    position
-                  </Typography>
-                </Box>
-              </Paper>
-            </CardContent>
-          </Card>
         </Box>
       </Box>
     </ThemeProvider>
