@@ -55,9 +55,15 @@ export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
   // Add a track
   const track = midi.addTrack()
 
+  // Set tempo for proper timing
+  midi.header.setTempo(120) // 120 BPM
+  
   // Add chords to the track
   let time = 0
-  const chordDuration = 0.75 // 750ms = 0.75 seconds
+  const barsPerChord = 1 // Each chord spans exactly 1 bar
+  const beatsPerBar = 4 // 4/4 time signature
+  const secondsPerBeat = 60 / 120 // 0.5 seconds per beat at 120 BPM
+  const chordDuration = barsPerChord * beatsPerBar * secondsPerBeat // 2 seconds per bar
 
   sequence.forEach((chord, index) => {
     if (chord && chord.chord) {
@@ -68,7 +74,7 @@ export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
         track.addNote({
           midi: noteNumber,
           time: time,
-          duration: chordDuration - 0.05, // Slight gap between chords
+          duration: chordDuration, // Full bar duration
         })
       })
     }
