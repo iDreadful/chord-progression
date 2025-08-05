@@ -1463,13 +1463,6 @@ const CircleOfFifths = () => {
                     color: '#cbd5e1',
                   }}
                 >
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    Click any key on the circle to select it
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Hover</strong> chords to preview •{' '}
-                    <strong>Click</strong> chords to record
-                  </Typography>
                   {!isAudioInitialized && (
                     <Typography
                       variant="body2"
@@ -1629,7 +1622,7 @@ const CircleOfFifths = () => {
                           }}
                         >
                           <Chip
-                            label="STRONG"
+                            label="Strong"
                             size="small"
                             color="success"
                             sx={{ fontWeight: 600 }}

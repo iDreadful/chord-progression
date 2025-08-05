@@ -20,8 +20,6 @@ const ModeSelector = ({ keyType, onModeChange }) => {
             minWidth: '70px',
             fontSize: '12px',
             px: 1,
-            borderRadius: '6px !important',
-            textTransform: 'capitalize',
             ...(keyType === modeKey && {
               background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
               color: 'white',

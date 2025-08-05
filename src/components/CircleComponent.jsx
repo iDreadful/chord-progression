@@ -60,7 +60,7 @@ const CircleComponent = ({
             width: 400,
             height: 400,
             borderRadius: '50%',
-            border: '2px solid rgba(99, 102, 241, 0.3)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
           }}
         />
 
@@ -88,7 +88,7 @@ const CircleComponent = ({
             height: 160,
             borderRadius: '50%',
             translate: '-50% -50%',
-            border: '2px solid rgba(99, 102, 241, 0.3)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
           }}
         />
       </Box>
@@ -145,7 +145,7 @@ const CircleComponent = ({
               minWidth: 36,
               borderRadius: '50%',
               background: backgroundColor,
-              border: `2px solid ${borderColor}`,
+              border: `1px solid ${borderColor}`,
               padding: 0,
               cursor: 'pointer',
               transition: 'all 0.2s',
@@ -153,10 +153,6 @@ const CircleComponent = ({
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              '&:hover': {
-                transform: 'scale(1.1)',
-                boxShadow: `0 4px 20px ${borderColor}40`,
-              },
             }}
             onMouseEnter={() => onChordPreview(chord, romanNumeral)}
             onMouseLeave={onMouseLeave}
@@ -178,7 +174,7 @@ const CircleComponent = ({
                 color: 'white',
                 lineHeight: 1,
                 userSelect: 'none',
-                marginBottom: '-2px',
+                marginBottom: '-1px',
               }}
             >
               <b>{romanNumeral}</b>
@@ -223,13 +219,7 @@ const CircleComponent = ({
               minWidth: 50,
               borderRadius: '50%',
               background: backgroundColor,
-              border: `2px solid ${borderColor}`,
               cursor: 'pointer',
-              transition: 'all 0.2s',
-              '&:hover': {
-                transform: 'scale(1.05)',
-                boxShadow: `0 4px 20px ${borderColor}40`,
-              },
             }}
             onClick={() => onKeyClick(key)}
           >
@@ -255,7 +245,7 @@ const CircleComponent = ({
         }}
       >
         <Typography
-          variant="h6"
+          variant="h2"
           sx={{
             fontWeight: 'bold',
             color: '#f8fafc',
@@ -266,12 +256,12 @@ const CircleComponent = ({
           {selectedKey} {modes[keyType].name}
         </Typography>
         <Typography
-          variant="body2"
+          variant="caption"
           sx={{
             fontWeight: 'medium',
             color: '#cbd5e1',
             userSelect: 'none',
-            fontSize: '12px',
+            fontSize: '11px',
           }}
         >
           {modes[keyType].description}

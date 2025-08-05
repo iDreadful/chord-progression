@@ -201,7 +201,7 @@ const CircleOfFifths = () => {
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
+              gridTemplateColumns: '1fr 1fr',
               gap: '32px',
               marginBottom: '32px',
             }}
@@ -210,7 +210,7 @@ const CircleOfFifths = () => {
             <Card>
               <CardContent sx={{ p: 3 }}>
                 <Box sx={{ textAlign: 'center', marginBottom: '24px' }}>
-                  <Typography variant="h4" component="h2" sx={{ mb: 3 }}>
+                  <Typography variant="h1" sx={{ mb: 3 }}>
                     Circle of Fifths
                   </Typography>
 
@@ -265,13 +265,6 @@ const CircleOfFifths = () => {
                     color: '#cbd5e1',
                   }}
                 >
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    Click any key on the circle to select it
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Hover</strong> chords to preview •{' '}
-                    <strong>Click</strong> chords to record
-                  </Typography>
                   {!isAudioInitialized && (
                     <Typography
                       variant="body2"
@@ -297,30 +290,29 @@ const CircleOfFifths = () => {
                 />
               </CardContent>
             </Card>
-
-            {/* Sequence Recorder - Right 50% */}
-            <Card>
-              <CardContent sx={{ p: 3 }}>
-                <SequenceRecorder
-                  sequence={sequence}
-                  sequenceLength={sequenceLength}
-                  currentPosition={currentPosition}
-                  playbackPosition={playbackPosition}
-                  isPlaying={isPlaying}
-                  onSequencePlay={playSequence}
-                  onSequenceLengthChange={changeSequenceLength}
-                  onSequenceClear={clearSequence}
-                  onPositionChange={setRecordingPosition}
-                  onChordRemove={removeChordFromPosition}
-                  onChordPreview={playChordPreview}
-                  onMouseLeave={handleMouseLeave}
-                  onDownloadMidi={handleDownloadMidi}
-                  selectedKey={selectedKey}
-                  keyType={keyType}
-                />
-              </CardContent>
-            </Card>
           </Box>
+          {/* Sequence Recorder - Right 50% */}
+          <Card>
+            <CardContent sx={{ p: 3 }}>
+              <SequenceRecorder
+                sequence={sequence}
+                sequenceLength={sequenceLength}
+                currentPosition={currentPosition}
+                playbackPosition={playbackPosition}
+                isPlaying={isPlaying}
+                onSequencePlay={playSequence}
+                onSequenceLengthChange={changeSequenceLength}
+                onSequenceClear={clearSequence}
+                onPositionChange={setRecordingPosition}
+                onChordRemove={removeChordFromPosition}
+                onChordPreview={playChordPreview}
+                onMouseLeave={handleMouseLeave}
+                onDownloadMidi={handleDownloadMidi}
+                selectedKey={selectedKey}
+                keyType={keyType}
+              />
+            </CardContent>
+          </Card>
         </Box>
       </Box>
     </ThemeProvider>

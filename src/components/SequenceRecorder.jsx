@@ -27,29 +27,36 @@ const SequenceRecorder = ({
 }) => {
   return (
     <Box>
-      <Typography variant="h4" component="h2" sx={{ mb: 3 }}>
+      <Typography variant="h1" sx={{ mb: 3 }}>
         Chord Sequence Recorder
       </Typography>
 
-      <Box sx={{ marginBottom: '24px' }}>
-        <ButtonGroup variant="outlined" size="small">
-          {[4, 8, 12, 16].map(length => (
-            <Button
-              key={length}
-              onClick={() => onSequenceLengthChange(length)}
-              variant={sequenceLength === length ? 'contained' : 'outlined'}
-            >
-              {length}
-            </Button>
-          ))}
-        </ButtonGroup>
+      <Box
+        sx={{
+          marginBottom: '24px',
+          display: 'flex',
+          gap: 1,
+          justifyContent: 'center',
+        }}
+      >
+        {/* <ButtonGroup variant="outlined" size="small"> */}
+        {[4, 8, 12, 16].map(length => (
+          <Button
+            key={length}
+            onClick={() => onSequenceLengthChange(length)}
+            variant={sequenceLength === length ? 'contained' : 'outlined'}
+          >
+            {length}
+          </Button>
+        ))}
+        {/* </ButtonGroup> */}
       </Box>
 
       <Box sx={{ marginBottom: '24px', marginTop: 4 }}>
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(8, minmax(10px, 1fr))',
+            gridTemplateColumns: 'repeat(16, minmax(10px, 1fr))',
 
             gap: 1,
           }}
@@ -64,10 +71,7 @@ const SequenceRecorder = ({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '2px solid',
-                borderColor:
-                  currentPosition === index ? '#ca8a04' : 'transparent',
-                borderRadius: '8px',
+
                 padding: '12px',
                 textAlign: 'center',
                 cursor: 'pointer',
@@ -80,7 +84,7 @@ const SequenceRecorder = ({
                     : currentPosition === index
                     ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
                     : chord
-                    ? 'linear-gradient(145deg, #2d1b69 0%, #3730a3 100%)'
+                    ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
                     : 'linear-gradient(145deg, #1f2937 0%, #374151 100%)',
                 color: 'white',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
@@ -94,9 +98,6 @@ const SequenceRecorder = ({
               onMouseLeave={onMouseLeave}
               onClick={() => onPositionChange(index)}
             >
-              <Typography variant="caption" sx={{ mb: 0.5 }}>
-                <b>{index + 1}</b>
-              </Typography>
               {chord ? (
                 <>
                   <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
@@ -122,11 +123,13 @@ const SequenceRecorder = ({
                       onChordRemove(index)
                     }}
                   >
-                    <Close fontSize="small" />
+                    <Close sx={{ fontSize: 16 }} />
                   </IconButton>
                 </>
               ) : (
-                <Typography variant="caption">Empty</Typography>
+                <Typography variant="caption" sx={{ opacity: 0.5 }}>
+                  Empty
+                </Typography>
               )}
             </Paper>
           ))}
@@ -145,12 +148,14 @@ const SequenceRecorder = ({
           onClick={onSequencePlay}
           variant="contained"
           color={isPlaying ? 'error' : 'success'}
+          sx={theme => ({ padding: theme.spacing(1, 2) })}
           startIcon={isPlaying ? <Stop /> : <PlayArrow />}
         >
           {isPlaying ? 'Stop' : 'Play'}
         </Button>
         <Button
           onClick={onSequenceClear}
+          sx={theme => ({ padding: theme.spacing(1, 2) })}
           variant="outlined"
           startIcon={<Delete />}
         >
@@ -159,32 +164,13 @@ const SequenceRecorder = ({
         <Button
           onClick={() => onDownloadMidi(selectedKey, keyType)}
           variant="outlined"
+          sx={theme => ({ padding: theme.spacing(1, 2) })}
           color="primary"
           startIcon={<Download />}
           disabled={sequence.every(chord => chord === null)}
         >
           Download MIDI
         </Button>
-      </Box>
-
-      <Box sx={{ fontSize: '12px', color: '#94a3b8' }}>
-        <Typography variant="caption" sx={{ display: 'block', mb: 0.5 }}>
-          <strong>Recording:</strong> Click chords to add them to the
-          highlighted position
-        </Typography>
-        <Typography variant="caption" sx={{ display: 'block', mb: 0.5 }}>
-          <strong>Position:</strong> Click sequence boxes to change recording
-          position
-        </Typography>
-        <Typography variant="caption" sx={{ display: 'block', mb: 0.5 }}>
-          <strong>Remove:</strong> Click × on individual chords to delete them
-        </Typography>
-        <Typography variant="caption" sx={{ display: 'block', mb: 0.5 }}>
-          <strong>Preview:</strong> Hover over sequence boxes to hear chords
-        </Typography>
-        <Typography variant="caption" sx={{ display: 'block' }}>
-          <strong>Export:</strong> Download MIDI file to use in your DAW
-        </Typography>
       </Box>
     </Box>
   )
