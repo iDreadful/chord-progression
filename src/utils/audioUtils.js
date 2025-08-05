@@ -7,29 +7,57 @@ export const initializeAudio = async () => {
     await Tone.start()
     console.log('Audio context started')
 
+    // Create a more analog-sounding 80s synth setup
     const synthInstance = new Tone.PolySynth(Tone.Synth, {
       oscillator: {
-        type: 'square',
-        partialCount: 3,
+        type: 'sawtooth',
+        detune: 0,
       },
       envelope: {
-        attack: 0.02,
-        decay: 0.1,
-        sustain: 0.3,
-        release: 0.4,
+        attack: 0.005,
+        decay: 0.3,
+        sustain: 0.4,
+        release: 1.2,
       },
-      volume: -12, // Reduced volume
-    }).toDestination()
+      volume: -8,
+    })
 
-    // Add a low-pass filter to make it smoother
+    // Create analog-style effects chain
+    const chorus = new Tone.Chorus({
+      frequency: 0.5,
+      delayTime: 3.5,
+      depth: 0.3,
+      spread: 180,
+    }).start()
+
     const filter = new Tone.Filter({
-      frequency: 2000,
+      frequency: 1200,
       type: 'lowpass',
-    }).toDestination()
+      rolloff: -12,
+      Q: 2,
+    })
 
-    synthInstance.connect(filter)
+    const reverb = new Tone.Reverb({
+      roomSize: 0.4,
+      dampening: 4000,
+      wet: 0.15,
+    })
 
-    console.log('Audio initialized successfully')
+    const compressor = new Tone.Compressor({
+      threshold: -18,
+      ratio: 3,
+      attack: 0.003,
+      release: 0.1,
+    })
+
+    // Connect the effects chain: Synth -> Chorus -> Filter -> Reverb -> Compressor -> Destination
+    synthInstance.connect(chorus)
+    chorus.connect(filter)
+    filter.connect(reverb)
+    reverb.connect(compressor)
+    compressor.toDestination()
+
+    console.log('80s analog synth initialized successfully')
     return synthInstance
   } catch (error) {
     console.error('Failed to initialize audio:', error)
