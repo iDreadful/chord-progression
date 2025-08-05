@@ -27,17 +27,7 @@ const SequenceRecorder = ({
 }) => {
   return (
     <Box>
-      <Typography
-        variant="h4"
-        component="h2"
-        sx={{
-          mb: 3,
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}
-      >
+      <Typography variant="h4" component="h2" sx={{ mb: 3 }}>
         Chord Sequence Recorder
       </Typography>
 
@@ -55,15 +45,13 @@ const SequenceRecorder = ({
         </ButtonGroup>
       </Box>
 
-      <Box sx={{ marginBottom: '24px' }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-          Sequence
-        </Typography>
+      <Box sx={{ marginBottom: '24px', marginTop: 4 }}>
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(8, 1fr)',
-            gap: '8px',
+            gridTemplateColumns: 'repeat(8, minmax(10px, 1fr))',
+
+            gap: 1,
           }}
         >
           {sequence.map((chord, index) => (
@@ -84,7 +72,8 @@ const SequenceRecorder = ({
                 textAlign: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-                minHeight: '80px',
+                minWidth: '25%',
+                minHeight: '60px',
                 background:
                   playbackPosition === index
                     ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
@@ -105,7 +94,7 @@ const SequenceRecorder = ({
               onMouseLeave={onMouseLeave}
               onClick={() => onPositionChange(index)}
             >
-              <Typography variant="caption" sx={{ color: 'grey.400', mb: 0.5 }}>
+              <Typography variant="caption" sx={{ mb: 0.5 }}>
                 <b>{index + 1}</b>
               </Typography>
               {chord ? (
@@ -137,9 +126,7 @@ const SequenceRecorder = ({
                   </IconButton>
                 </>
               ) : (
-                <Typography variant="caption" sx={{ color: 'grey.400' }}>
-                  Empty
-                </Typography>
+                <Typography variant="caption">Empty</Typography>
               )}
             </Paper>
           ))}
