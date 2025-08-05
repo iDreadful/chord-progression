@@ -7,7 +7,7 @@ export const initializeAudio = async () => {
     await Tone.start()
     console.log('Audio context started')
 
-    // Create a more analog-sounding 80s synth setup
+    // Synth setup
     const synthInstance = new Tone.PolySynth(Tone.Synth, {
       oscillator: {
         type: 'sawtooth',
@@ -50,14 +50,14 @@ export const initializeAudio = async () => {
       release: 0.1,
     })
 
-    // Connect the effects chain: Synth -> Chorus -> Filter -> Reverb -> Compressor -> Destination
+    // Connect the effects chain
     synthInstance.connect(chorus)
     chorus.connect(filter)
     filter.connect(reverb)
     reverb.connect(compressor)
     compressor.toDestination()
 
-    console.log('80s analog synth initialized successfully')
+    console.log('Synth initialized successfully')
     return synthInstance
   } catch (error) {
     console.error('Failed to initialize audio:', error)
@@ -71,17 +71,11 @@ export const playChord = (synth, chordName) => {
     console.log('Audio not ready yet')
     return
   }
-
   const frequencies = getChordFrequencies(chordName)
-  console.log('Playing chord:', chordName, 'Frequencies:', frequencies)
-
   if (frequencies.length > 0) {
-    // Stop any currently playing notes first
     synth.releaseAll()
 
-    // Short delay then play the new chord
     setTimeout(() => {
-      // Use frequencies directly like the original working version
       synth.triggerAttackRelease(frequencies, '0.8')
     }, 50)
   }

@@ -57,7 +57,7 @@ export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
 
   // Set tempo for proper timing
   midi.header.setTempo(120) // 120 BPM
-  
+
   // Add chords to the track
   let time = 0
   const barsPerChord = 1 // Each chord spans exactly 1 bar
@@ -86,9 +86,15 @@ export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
   const blob = new Blob([array], { type: 'audio/midi' })
   const url = URL.createObjectURL(blob)
 
+  // Extract chord names from sequence for filename
+  const chordNames = sequence
+    .filter(chord => chord && chord.chord)
+    .map(chord => chord.chord)
+    .join(',')
+
   const a = document.createElement('a')
   a.href = url
-  a.download = `chord-sequence-${selectedKey}-${modes[
+  a.download = `${chordNames}-${selectedKey}-${modes[
     keyType
   ].name.toLowerCase()}.mid`
   document.body.appendChild(a)
