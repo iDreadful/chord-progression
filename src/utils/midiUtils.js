@@ -1,0 +1,92 @@
+import { Midi } from '@tonejs/midi'
+import { modes } from './musicData.js'
+
+// Convert chord name to MIDI notes
+export const chordToMidiNotes = chordName => {
+  const root = chordName.replace(/[m°#b]/g, '')
+
+  // Note to MIDI mapping (C4 = 60)
+  const noteToMidi = {
+    C: 60,
+    'C#': 61,
+    Db: 61,
+    D: 62,
+    'D#': 63,
+    Eb: 63,
+    E: 64,
+    F: 65,
+    'F#': 66,
+    Gb: 66,
+    G: 67,
+    'G#': 68,
+    Ab: 68,
+    A: 69,
+    'A#': 70,
+    Bb: 70,
+    B: 71,
+  }
+
+  const rootMidi = noteToMidi[root]
+  if (!rootMidi) return []
+
+  let notes = [rootMidi]
+
+  if (chordName.includes('m') && !chordName.includes('°')) {
+    // Minor chord: root, minor third, fifth
+    notes.push(rootMidi + 3)
+    notes.push(rootMidi + 7) // fifth
+  } else if (chordName.includes('°')) {
+    // Diminished chord: root, minor third, diminished fifth
+    notes.push(rootMidi + 3) // minor third
+    notes.push(rootMidi + 6) // diminished fifth
+  } else {
+    // Major chord: root, major third, fifth
+    notes.push(rootMidi + 4) // major third
+    notes.push(rootMidi + 7) // fifth
+  }
+
+  return notes
+}
+
+export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
+  // Create a new MIDI object
+  const midi = new Midi()
+
+  // Add a track
+  const track = midi.addTrack()
+
+  // Add chords to the track
+  let time = 0
+  const chordDuration = 0.75 // 750ms = 0.75 seconds
+
+  sequence.forEach((chord, index) => {
+    if (chord && chord.chord) {
+      const midiNotes = chordToMidiNotes(chord.chord)
+
+      // Add each note of the chord
+      midiNotes.forEach(noteNumber => {
+        track.addNote({
+          midi: noteNumber,
+          time: time,
+          duration: chordDuration - 0.05, // Slight gap between chords
+        })
+      })
+    }
+    time += chordDuration
+  })
+
+  // Create and download the file
+  const array = midi.toArray()
+  const blob = new Blob([array], { type: 'audio/midi' })
+  const url = URL.createObjectURL(blob)
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `chord-sequence-${selectedKey}-${modes[
+    keyType
+  ].name.toLowerCase()}.mid`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
