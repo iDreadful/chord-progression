@@ -20,8 +20,8 @@ const CircleComponent = ({
   const keys = getCurrentKeys(keyType)
   const currentChords = getCurrentChords(keyType, selectedKey)
   const radius = 140
-  const centerX = 250
-  const centerY = 250
+  const centerX = 200
+  const centerY = 200
 
   // Get all root notes from current key's chords for highlighting
   const chordRoots = currentChords.notes.map(chord => {
@@ -35,8 +35,8 @@ const CircleComponent = ({
         display: 'flex',
         justifyContent: 'center',
         position: 'relative',
-        width: 500,
-        height: 500,
+        width: 400,
+        height: 400,
         margin: '0 auto',
       }}
     >
@@ -46,8 +46,8 @@ const CircleComponent = ({
           position: 'absolute',
           top: 0,
           left: 0,
-          width: 500,
-          height: 500,
+          width: 400,
+          height: 400,
           pointerEvents: 'none',
         }}
       >
@@ -55,8 +55,8 @@ const CircleComponent = ({
         <Box
           sx={{
             position: 'absolute',
-            top: 50,
-            left: 50,
+            top: 0,
+            left: 0,
             width: 400,
             height: 400,
             borderRadius: '50%',
@@ -82,11 +82,12 @@ const CircleComponent = ({
         <Box
           sx={{
             position: 'absolute',
-            top: 170,
-            left: 170,
+            top: '50%',
+            left: '50%',
             width: 160,
             height: 160,
             borderRadius: '50%',
+            translate: '-50% -50%',
             border: '2px solid rgba(99, 102, 241, 0.3)',
           }}
         />
@@ -164,27 +165,23 @@ const CircleComponent = ({
             <Typography
               variant="caption"
               sx={{
-                fontSize: '8px',
-                fontWeight: 'semibold',
+                color: 'white',
+                lineHeight: 1,
+                userSelect: 'none',
+              }}
+            >
+              <b>{chord}</b>
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
                 color: 'white',
                 lineHeight: 1,
                 userSelect: 'none',
                 marginBottom: '-2px',
               }}
             >
-              {romanNumeral}
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: '7px',
-                fontWeight: 'medium',
-                color: 'white',
-                lineHeight: 1,
-                userSelect: 'none',
-              }}
-            >
-              {chord}
+              <b>{romanNumeral}</b>
             </Typography>
           </Button>
         )
@@ -238,14 +235,9 @@ const CircleComponent = ({
           >
             <Typography
               variant="body2"
-              sx={{
-                fontSize: '14px',
-                fontWeight: 'semibold',
-                color: 'white',
-                userSelect: 'none',
-              }}
+              sx={{ color: 'white', userSelect: 'none' }}
             >
-              {key}
+              <b>{key}</b>
             </Typography>
           </Button>
         )
