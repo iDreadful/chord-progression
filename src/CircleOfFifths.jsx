@@ -1,4 +1,11 @@
-import { Close, Delete, PlayArrow, Stop, VolumeUp } from '@mui/icons-material'
+import {
+  Close,
+  Delete,
+  Download,
+  PlayArrow,
+  Stop,
+  VolumeUp,
+} from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -13,6 +20,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import * as Tone from 'tone'
+import { Midi } from '@tonejs/midi'
 import theme from './theme'
 
 const CircleOfFifths = () => {
@@ -39,7 +47,7 @@ const CircleOfFifths = () => {
 
         const synthInstance = new Tone.PolySynth(Tone.Synth, {
           oscillator: {
-            type: 'triangle',
+            type: 'square',
             partialCount: 3,
           },
           envelope: {
@@ -961,6 +969,98 @@ const CircleOfFifths = () => {
     }
   }
 
+  // Download sequence as MIDI file
+  const downloadMidiSequence = () => {
+    // Create a new MIDI object
+    const midi = new Midi()
+
+    // Add a track
+    const track = midi.addTrack()
+
+    // Convert chord names to MIDI notes
+    const chordToMidiNotes = chordName => {
+      const root = chordName.replace(/[m°#b]/g, '')
+
+      // Note to MIDI mapping (C4 = 60)
+      const noteToMidi = {
+        C: 60,
+        'C#': 61,
+        Db: 61,
+        D: 62,
+        'D#': 63,
+        Eb: 63,
+        E: 64,
+        F: 65,
+        'F#': 66,
+        Gb: 66,
+        G: 67,
+        'G#': 68,
+        Ab: 68,
+        A: 69,
+        'A#': 70,
+        Bb: 70,
+        B: 71,
+      }
+
+      const rootMidi = noteToMidi[root]
+      if (!rootMidi) return []
+
+      let notes = [rootMidi]
+
+      if (chordName.includes('m') && !chordName.includes('°')) {
+        // Minor chord: root, minor third, fifth
+        notes.push(rootMidi + 3) // minor third
+        notes.push(rootMidi + 7) // fifth
+      } else if (chordName.includes('°')) {
+        // Diminished chord: root, minor third, diminished fifth
+        notes.push(rootMidi + 3) // minor third
+        notes.push(rootMidi + 6) // diminished fifth
+      } else {
+        // Major chord: root, major third, fifth
+        notes.push(rootMidi + 4) // major third
+        notes.push(rootMidi + 7) // fifth
+      }
+
+      return notes
+    }
+
+    // Add chords to the track
+    let time = 0
+    const chordDuration = 0.75 // 750ms = 0.75 seconds
+
+    sequence.forEach((chord, index) => {
+      if (chord && chord.chord) {
+        const midiNotes = chordToMidiNotes(chord.chord)
+
+        // Add each note of the chord
+        midiNotes.forEach(noteNumber => {
+          track.addNote({
+            midi: noteNumber,
+            time: time,
+            duration: chordDuration,
+            velocity: 0.8,
+          })
+        })
+      }
+      time += chordDuration
+    })
+
+    // Create and download the file
+    const array = midi.toArray()
+    const blob = new Blob([array], { type: 'audio/midi' })
+    const url = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `chord-sequence-${selectedKey}-${modes[
+      keyType
+    ].name.toLowerCase()}.mid`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   const getCurrentKeys = () => {
     if (keyType === 'ionian' || keyType === 'major') return majorKeys
     if (keyType === 'aeolian' || keyType === 'minor') return minorKeys
@@ -1301,8 +1401,8 @@ const CircleOfFifths = () => {
       <Box sx={{ color: 'white', p: 3 }}>
         <Box sx={{ margin: '0 auto' }}>
           {/* First Row: Circle and Sequencer */}
-          <div
-            style={{
+          <Box
+            sx={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr 1fr',
               gap: '32px',
@@ -1312,7 +1412,7 @@ const CircleOfFifths = () => {
             {/* Circle Section - Left 50% */}
             <Card>
               <CardContent sx={{ p: 3 }}>
-                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <Box sx={{ textAlign: 'center', marginBottom: '24px' }}>
                   <Typography variant="h4" component="h2" sx={{ mb: 3 }}>
                     Circle of Fifths
                   </Typography>
@@ -1380,12 +1480,12 @@ const CircleOfFifths = () => {
                       </IconButton>
                     )}
                   </Box>
-                </div>
+                </Box>
 
                 {renderCircle()}
 
-                <div
-                  style={{
+                <Box
+                  sx={{
                     textAlign: 'center',
                     marginTop: '16px',
                     fontSize: '14px',
@@ -1407,7 +1507,7 @@ const CircleOfFifths = () => {
                       💡 Click "Enable Audio" to hear chord previews on hover
                     </Typography>
                   )}
-                </div>
+                </Box>
               </CardContent>
             </Card>
 
@@ -1434,7 +1534,14 @@ const CircleOfFifths = () => {
                     {selectedKey} {modes[keyType].name}
                   </Typography>
 
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 1,
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                    }}
+                  >
                     {currentChords.roman.map((romanNumeral, index) => {
                       const chordNote = currentChords.notes[index]
                       const isSelected = selectedChord === romanNumeral
@@ -1706,15 +1813,15 @@ const CircleOfFifths = () => {
                   </ButtonGroup>
                 </Box>
 
-                <div style={{ marginBottom: '24px' }}>
+                <Box sx={{ marginBottom: '24px' }}>
                   <Typography
                     variant="subtitle2"
                     sx={{ fontWeight: 600, mb: 1 }}
                   >
                     Sequence
                   </Typography>
-                  <div
-                    style={{
+                  <Box
+                    sx={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(4, 1fr)',
                       gap: '8px',
@@ -1726,6 +1833,10 @@ const CircleOfFifths = () => {
                         elevation={currentPosition === index ? 4 : 1}
                         sx={{
                           position: 'relative',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           border: '2px solid',
                           borderColor:
                             currentPosition === index
@@ -1761,7 +1872,7 @@ const CircleOfFifths = () => {
                           variant="caption"
                           sx={{ color: 'grey.400', mb: 0.5 }}
                         >
-                          {index + 1}
+                          <b>{index + 1}</b>
                         </Typography>
                         {chord ? (
                           <>
@@ -1806,10 +1917,17 @@ const CircleOfFifths = () => {
                         )}
                       </Paper>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    mb: 2,
+                    justifyContent: 'center',
+                  }}
+                >
                   <Button
                     onClick={playSequence}
                     variant="contained"
@@ -1824,6 +1942,15 @@ const CircleOfFifths = () => {
                     startIcon={<Delete />}
                   >
                     Clear All
+                  </Button>
+                  <Button
+                    onClick={downloadMidiSequence}
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<Download />}
+                    disabled={sequence.every(chord => chord === null)}
+                  >
+                    Download MIDI
                   </Button>
                 </Box>
 
@@ -1849,14 +1976,21 @@ const CircleOfFifths = () => {
                     <strong>Remove:</strong> Click × on individual chords to
                     delete them
                   </Typography>
-                  <Typography variant="caption" sx={{ display: 'block' }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ display: 'block', mb: 0.5 }}
+                  >
                     <strong>Preview:</strong> Hover over sequence boxes to hear
                     chords
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: 'block' }}>
+                    <strong>Export:</strong> Download MIDI file to use in your
+                    DAW
                   </Typography>
                 </Box>
               </CardContent>
             </Card>
-          </div>
+          </Box>
         </Box>
       </Box>
     </ThemeProvider>
