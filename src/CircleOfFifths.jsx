@@ -1,16 +1,21 @@
 import {
-  Circle,
   LinearScale,
   PanoramaFishEye,
   VolumeUp,
+  AutoAwesome,
 } from '@mui/icons-material'
 import {
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardContent,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
+  TextField,
   ThemeProvider,
   Typography,
 } from '@mui/material'
@@ -19,6 +24,7 @@ import { initializeAudio, playChord } from './utils/audioUtils.js'
 import { getCurrentKeys } from './utils/musicUtils.js'
 import { majorKeys, minorKeys, modalKeys, modes } from './utils/musicData.js'
 import { downloadMidiSequence } from './utils/midiUtils.js'
+import { generateAIProgression } from './utils/aiUtils.js'
 import CircleComponent from './components/CircleComponent.jsx'
 import ChordProgressions from './components/ChordProgressions.jsx'
 import ModeSelector from './components/ModeSelector.jsx'
@@ -33,6 +39,11 @@ const CircleOfFifths = () => {
   const [selectedChord, setSelectedChord] = useState(null)
   const [lastHoveredChord, setLastHoveredChord] = useState(null)
   const [activeView, setActiveView] = useState('circle') // 'circle' or 'line'
+
+  // Prompt modal state
+  const [isPromptOpen, setIsPromptOpen] = useState(false)
+  const [promptText, setPromptText] = useState('')
+  const [isGenerating, setIsGenerating] = useState(false)
 
   // Sequence recording state
   const [sequenceLength, setSequenceLength] = useState(8)
@@ -201,6 +212,47 @@ const CircleOfFifths = () => {
     downloadMidiSequence(sequence, selectedKey, keyType)
   }
 
+  const handleOpenPrompt = () => {
+    setIsPromptOpen(true)
+  }
+
+  const handleClosePrompt = () => {
+    setIsPromptOpen(false)
+    setPromptText('')
+  }
+
+  const handleGenerateProgression = async () => {
+    setIsGenerating(true)
+
+    try {
+      console.error('Generating progression:')
+      const progression = await generateAIProgression(
+        promptText,
+        selectedKey,
+        keyType,
+        sequenceLength
+      )
+
+      // Apply the generated progression to the sequence
+      setSequence(progression)
+      setCurrentPosition(0)
+      handleClosePrompt()
+    } catch (error) {
+      console.error('Failed to generate progression:', error)
+      // Fallback to placeholder progression
+      // const placeholderProgression = generatePlaceholderProgression(
+      //   selectedKey,
+      //   keyType,
+      //   sequenceLength
+      // )
+      // setSequence(placeholderProgression)
+      // setCurrentPosition(0)
+      handleClosePrompt()
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ color: 'white', p: 3 }}>
@@ -221,6 +273,20 @@ const CircleOfFifths = () => {
                   <Typography variant="h1">Chord progression helper</Typography>
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* AI Generation Button */}
+                    <Button
+                      onClick={handleOpenPrompt}
+                      variant="contained"
+                      startIcon={<AutoAwesome />}
+                      sx={theme => ({
+                        borderColor: '#a78bfa',
+                        paddingLeft: theme.spacing(2),
+                        paddingRight: theme.spacing(2),
+                      })}
+                    >
+                      Generate
+                    </Button>
+
                     {/* View Toggle */}
 
                     <Button
@@ -240,13 +306,31 @@ const CircleOfFifths = () => {
 
                     {/* Speaker Button */}
                     {!isAudioInitialized && (
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={handleInitializeAudio}
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          display: 'inline-block',
+                        }}
                       >
-                        <VolumeUp />
-                      </IconButton>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={handleInitializeAudio}
+                          sx={{
+                            animation: 'ripple 2s infinite',
+                            '@keyframes ripple': {
+                              '0%': {
+                                boxShadow: '0 0 0 0 #f44336',
+                              },
+                              '100%': {
+                                boxShadow: '0 0 0 10px #f4433600',
+                              },
+                            },
+                          }}
+                        >
+                          <VolumeUp />
+                        </IconButton>
+                      </Box>
                     )}
                     {isAudioInitialized && (
                       <IconButton size="small" color="success">
@@ -292,21 +376,6 @@ const CircleOfFifths = () => {
                   onMouseLeave={handleMouseLeave}
                 />
               )}
-
-              <Box
-                sx={{
-                  textAlign: 'center',
-                  marginTop: '16px',
-                  fontSize: '14px',
-                  color: '#cbd5e1',
-                }}
-              >
-                {!isAudioInitialized && (
-                  <Typography variant="body2" sx={{ mt: 1, color: '#f59e0b' }}>
-                    💡 Click "Enable Audio" to hear chord previews on hover
-                  </Typography>
-                )}
-              </Box>
             </CardContent>
           </Card>
 
@@ -333,6 +402,72 @@ const CircleOfFifths = () => {
             </CardContent>
           </Card>
         </Box>
+
+        {/* Chord Progression Generation Dialog */}
+        <Dialog
+          open={isPromptOpen}
+          onClose={handleClosePrompt}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>Generate Chord Progression</DialogTitle>
+          <DialogContent>
+            <Box sx={{ mb: 2, color: '#cbd5e1', fontSize: '14px' }}>
+              <Typography variant="body2">
+                Current settings: {selectedKey} {keyType} • {sequenceLength}{' '}
+                chords
+              </Typography>
+            </Box>
+            <TextField
+              autoFocus
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              placeholder="Describe the chord progression you want... (e.g., 'sad and melancholic', 'uplifting pop progression', 'jazz-inspired with unexpected changes')"
+              value={promptText}
+              onChange={e => setPromptText(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  color: 'white',
+                  '& fieldset': {
+                    // borderColor: '#374151',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#6b7280',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#a78bfa',
+                  },
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#9ca3af',
+                },
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosePrompt} disabled={isGenerating}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleGenerateProgression}
+              variant="contained"
+              disabled={!promptText.trim() || isGenerating}
+              startIcon={
+                isGenerating ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : null
+              }
+              sx={theme => ({
+                paddingLeft: theme.spacing(2),
+                paddingRight: theme.spacing(2),
+              })}
+            >
+              {isGenerating ? 'Generating...' : 'Generate'}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </ThemeProvider>
   )

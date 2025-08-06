@@ -17,9 +17,6 @@ const ChordProgressions = ({
 
   return (
     <Box>
-      <Typography variant="h1" sx={{ mb: 3 }}>
-        Chords & Progressions
-      </Typography>
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h6"
