@@ -3,10 +3,15 @@ import {
   Button,
   ButtonGroup,
   IconButton,
-  Paper,
   Typography,
 } from '@mui/material'
-import { Close, Delete, Download, PlayArrow, Stop } from '@mui/icons-material'
+import {
+  CleaningServices,
+  Close,
+  Download,
+  PlayArrow,
+  Stop,
+} from '@mui/icons-material'
 
 const SequenceRecorder = ({
   sequence,
@@ -27,30 +32,49 @@ const SequenceRecorder = ({
 }) => {
   return (
     <Box>
-      <Typography variant="h1" sx={{ mb: 3 }}>
-        Chord Sequence Recorder
-      </Typography>
+      <Box sx={{ marginBottom: '24px' }}>
+        {/* Title and Controls Row */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mb: 3,
+          }}
+        >
+          <Typography variant="h1">Chord Sequence Recorder</Typography>
 
-      <Box
-        sx={{
-          marginBottom: '24px',
-          display: 'flex',
-          gap: 1,
-          justifyContent: 'center',
-        }}
-      >
-        {/* <ButtonGroup variant="outlined" size="small"> */}
-        {[4, 8, 12, 16].map(length => (
-          <Button
-            key={length}
-            onClick={() => onSequenceLengthChange(length)}
-            variant={sequenceLength === length ? 'contained' : 'outlined'}
-            sx={{ width: 50 }}
-          >
-            {length}
-          </Button>
-        ))}
-        {/* </ButtonGroup> */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <ButtonGroup>
+              {[4, 8, 12, 16].map(length => (
+                <Button
+                  key={length}
+                  onClick={() => onSequenceLengthChange(length)}
+                  variant={sequenceLength === length ? 'contained' : 'outlined'}
+                  sx={{ width: 40 }}
+                >
+                  {length}
+                </Button>
+              ))}
+            </ButtonGroup>
+
+            <Button onClick={onSequencePlay} variant="contained">
+              {isPlaying ? <Stop /> : <PlayArrow />}
+            </Button>
+            <Button onClick={onSequenceClear} size="small" variant="outlined">
+              <CleaningServices />
+            </Button>
+            <Button
+              onClick={() => onDownloadMidi(selectedKey, keyType)}
+              size="small"
+              variant="outlined"
+              color="primary"
+              disabled={sequence.every(chord => chord === null)}
+            >
+              <Download />
+            </Button>
+          </Box>
+        </Box>
       </Box>
 
       <Box sx={{ marginBottom: '24px', marginTop: 4 }}>
@@ -74,14 +98,43 @@ const SequenceRecorder = ({
                 minHeight: 60,
                 background:
                   playbackPosition === index
-                    ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                    ? '#059669'
                     : currentPosition === index
-                    ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+                    ? '#d97706'
                     : chord
-                    ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
-                    : 'linear-gradient(145deg, #1f2937 0%, #374151 100%)',
-                color: 'white',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    ? '#4f46e5'
+                    : '#ffffff',
+                border: `1px solid ${
+                  playbackPosition === index
+                    ? '#047857'
+                    : currentPosition === index
+                    ? '#b45309'
+                    : chord
+                    ? '#3730a3'
+                    : 'rgba(0, 0, 0, 0.05)'
+                }`,
+                color:
+                  playbackPosition === index ||
+                  currentPosition === index ||
+                  chord
+                    ? 'white'
+                    : '#6b7280',
+                boxShadow:
+                  playbackPosition === index ||
+                  currentPosition === index ||
+                  chord
+                    ? '0 6px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                    : '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow:
+                    '0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
+                  boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+                },
               })}
               onMouseEnter={() =>
                 chord && onChordPreview(chord.chord, chord.roman)
@@ -136,34 +189,7 @@ const SequenceRecorder = ({
           mb: 2,
           justifyContent: 'center',
         }}
-      >
-        <Button
-          onClick={onSequencePlay}
-          variant="contained"
-          sx={theme => ({ padding: theme.spacing(1, 2) })}
-          startIcon={isPlaying ? <Stop /> : <PlayArrow />}
-        >
-          {isPlaying ? 'Stop' : 'Play'}
-        </Button>
-        <Button
-          onClick={onSequenceClear}
-          sx={theme => ({ padding: theme.spacing(1, 2) })}
-          variant="outlined"
-          startIcon={<Delete />}
-        >
-          Clear All
-        </Button>
-        <Button
-          onClick={() => onDownloadMidi(selectedKey, keyType)}
-          variant="outlined"
-          sx={theme => ({ padding: theme.spacing(1, 2) })}
-          color="primary"
-          startIcon={<Download />}
-          disabled={sequence.every(chord => chord === null)}
-        >
-          Download MIDI
-        </Button>
-      </Box>
+      ></Box>
     </Box>
   )
 }

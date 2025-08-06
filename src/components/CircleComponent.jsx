@@ -60,7 +60,7 @@ const CircleComponent = ({
             width: 400,
             height: 400,
             borderRadius: '50%',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
           }}
         />
 
@@ -74,7 +74,7 @@ const CircleComponent = ({
             height: 280,
             borderRadius: '50%',
             translate: '-50% -50%',
-            border: '1px solid rgba(99, 102, 241, 0.2)',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
           }}
         />
 
@@ -88,7 +88,7 @@ const CircleComponent = ({
             height: 160,
             borderRadius: '50%',
             translate: '-50% -50%',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
           }}
         />
       </Box>
@@ -117,19 +117,26 @@ const CircleComponent = ({
         const isWeakSuggestion =
           suggestions && suggestions.weak.includes(romanNumeral)
 
-        let backgroundColor =
-          'linear-gradient(145deg, #1a1a3a 0%, #2d1b69 100%)'
-        let borderColor = '#6366f1'
+        let backgroundColor = '#ffffff'
+        let boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+        let borderColor = 'rgba(0, 0, 0, 0.05)'
+        let textColor = '#374151'
 
         if (isSelected) {
-          backgroundColor = 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
-          borderColor = '#4f46e5'
+          backgroundColor = '#4f46e5'
+          boxShadow = '0 6px 16px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          borderColor = '#3730a3'
+          textColor = '#ffffff'
         } else if (isStrongSuggestion) {
-          backgroundColor = 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
-          borderColor = '#059669'
+          backgroundColor = '#059669'
+          boxShadow = '0 6px 16px rgba(5, 150, 105, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          borderColor = '#047857'
+          textColor = '#ffffff'
         } else if (isWeakSuggestion) {
-          backgroundColor = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
-          borderColor = '#d97706'
+          backgroundColor = '#d97706'
+          boxShadow = '0 6px 16px rgba(217, 119, 6, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          borderColor = '#b45309'
+          textColor = '#ffffff'
         }
 
         return (
@@ -146,13 +153,22 @@ const CircleComponent = ({
               borderRadius: '50%',
               background: backgroundColor,
               border: `1px solid ${borderColor}`,
+              boxShadow: boxShadow,
               padding: 0,
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.2s ease-in-out',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: `0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)`,
+              },
+              '&:active': {
+                transform: 'translateY(0)',
+                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+              },
             }}
             onMouseEnter={() => onChordPreview(chord, romanNumeral)}
             onMouseLeave={onMouseLeave}
@@ -161,7 +177,7 @@ const CircleComponent = ({
             <Typography
               variant="caption"
               sx={{
-                color: 'white',
+                color: textColor,
                 lineHeight: 1,
                 userSelect: 'none',
               }}
@@ -171,7 +187,7 @@ const CircleComponent = ({
             <Typography
               variant="caption"
               sx={{
-                color: 'white',
+                color: textColor,
                 lineHeight: 1,
                 userSelect: 'none',
                 marginBottom: '-1px',
@@ -194,16 +210,21 @@ const CircleComponent = ({
         const keyRoot = key.replace('m', '')
         const isChordRoot = chordRoots.includes(keyRoot)
 
-        let backgroundColor =
-          'linear-gradient(145deg, #374151 0%, #1f2937 100%)'
-        let borderColor = 'rgba(99, 102, 241, 0.3)'
+        let backgroundColor = '#ffffff'
+        let boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+        let borderColor = 'rgba(0, 0, 0, 0.05)'
+        let textColor = '#374151'
 
         if (isSelected) {
-          backgroundColor = 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
-          borderColor = '#4f46e5'
+          backgroundColor = '#4f46e5'
+          boxShadow = '0 6px 16px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          borderColor = '#3730a3'
+          textColor = '#ffffff'
         } else if (isChordRoot) {
-          backgroundColor = 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)'
+          backgroundColor = '#fbbf24'
+          boxShadow = '0 6px 16px rgba(251, 191, 36, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
           borderColor = '#d97706'
+          textColor = '#374151'
         }
 
         return (
@@ -219,13 +240,24 @@ const CircleComponent = ({
               minWidth: 50,
               borderRadius: '50%',
               background: backgroundColor,
+              border: `1px solid ${borderColor}`,
+              boxShadow: boxShadow,
               cursor: 'pointer',
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: `0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)`,
+              },
+              '&:active': {
+                transform: 'translateY(0)',
+                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+              },
             }}
             onClick={() => onKeyClick(key)}
           >
             <Typography
               variant="body2"
-              sx={{ color: 'white', userSelect: 'none' }}
+              sx={{ color: textColor, userSelect: 'none' }}
             >
               <b>{key}</b>
             </Typography>
@@ -248,7 +280,7 @@ const CircleComponent = ({
           variant="h2"
           sx={{
             fontWeight: 'bold',
-            color: '#f8fafc',
+            color: '#1f2937',
             userSelect: 'none',
             lineHeight: 1.2,
           }}
@@ -259,7 +291,7 @@ const CircleComponent = ({
           variant="caption"
           sx={{
             fontWeight: 'medium',
-            color: '#cbd5e1',
+            color: '#6b7280',
             userSelect: 'none',
             fontSize: '11px',
           }}

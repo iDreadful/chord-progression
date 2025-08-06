@@ -1,45 +1,45 @@
 import { createTheme } from '@mui/material'
 
-// Create modern theme
+// Create neumorphic light theme
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: '#6366f1', // Modern indigo
-      light: '#818cf8',
-      dark: '#4f46e5',
+      main: '#6b7280', // Subtle gray
+      light: '#9ca3af',
+      dark: '#374151',
     },
     secondary: {
-      main: '#f59e0b', // Warm amber
-      light: '#fbbf24',
-      dark: '#d97706',
+      main: '#4f46e5', // Accent indigo
+      light: '#6366f1',
+      dark: '#3730a3',
     },
     success: {
-      main: '#10b981', // Modern emerald
-      light: '#34d399',
-      dark: '#059669',
+      main: '#059669',
+      light: '#10b981',
+      dark: '#047857',
     },
     warning: {
-      main: '#f59e0b', // Warm amber
-      light: '#fbbf24',
-      dark: '#d97706',
+      main: '#d97706',
+      light: '#f59e0b',
+      dark: '#b45309',
     },
     error: {
-      main: '#ef4444', // Modern red
-      light: '#f87171',
-      dark: '#dc2626',
+      main: '#dc2626',
+      light: '#ef4444',
+      dark: '#b91c1c',
     },
     background: {
-      default: '#0f0f23', // Deep space blue
-      paper: '#1a1a3a', // Darker space blue
+      default: '#f1f5f9', // Light gray background
+      paper: '#ffffff', // Pure white cards
     },
     text: {
-      primary: '#f8fafc',
-      secondary: '#cbd5e1',
+      primary: '#1f2937',
+      secondary: '#6b7280',
     },
   },
   shape: {
-    borderRadius: 10, // More rounded corners
+    borderRadius: 16, // More rounded corners for neumorphic look
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -83,8 +83,10 @@ const theme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: 10,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          borderRadius: 16,
+          boxShadow:
+            '0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05)',
+          border: '1px solid rgba(255, 255, 255, 0.8)',
         },
       },
     },
@@ -92,27 +94,40 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           padding: 4,
-          // paddingLeft: '0 !important',
-          // paddingRight: '0 !important',
           minWidth: 'unset !important',
-          transition: 'all 0.2s',
+          transition: 'all 0.2s ease-in-out',
+          borderRadius: 12,
           '&:hover': {
-            transform: 'scale(1.05)',
+            transform: 'translateY(-1px)',
           },
         },
         contained: {
-          borderWidth: 1,
-          borderColor: 'transparent',
-          borderStyle: 'solid',
-          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+          background: '#ffffff',
+          color: '#374151',
+          boxShadow:
+            '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+          border: '1px solid rgba(0, 0, 0, 0.05)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+            background: '#f8fafc',
+            boxShadow:
+              '0 6px 16px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+          },
+          '&:active': {
+            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(0)',
           },
         },
         outlined: {
-          borderWidth: 1,
+          background: '#f8fafc',
+          borderColor: 'rgba(0, 0, 0, 0.1)',
+          color: '#374151',
+          boxShadow:
+            'inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 2px 8px rgba(0, 0, 0, 0.05)',
           '&:hover': {
-            borderWidth: 1,
+            background: '#f1f5f9',
+            borderColor: 'rgba(0, 0, 0, 0.15)',
+            boxShadow:
+              'inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.08)',
           },
         },
       },
@@ -135,15 +150,23 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 12,
+          background: '#ffffff',
+          boxShadow:
+            '0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+          border: '1px solid rgba(0, 0, 0, 0.05)',
+          '&:hover': {
+            background: '#f8fafc',
+            boxShadow:
+              '0 4px 12px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+            transform: 'translateY(-1px)',
+          },
         },
       },
     },
     MuiButtonGroup: {
       styleOverrides: {
-        root: {
-          overflow: 'hidden',
-        },
+        root: {},
       },
     },
   },

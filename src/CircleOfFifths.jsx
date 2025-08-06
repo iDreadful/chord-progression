@@ -7,9 +7,9 @@ import {
 import {
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardContent,
-  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -23,7 +23,7 @@ import {
 import { useState } from 'react'
 import { initializeAudio, playChord } from './utils/audioUtils.js'
 import { getCurrentKeys } from './utils/musicUtils.js'
-import { majorKeys, minorKeys, modalKeys, modes } from './utils/musicData.js'
+import { majorKeys, minorKeys, modalKeys } from './utils/musicData.js'
 import { downloadMidiSequence } from './utils/midiUtils.js'
 import { generateAIProgression } from './utils/aiUtils.js'
 import CircleComponent from './components/CircleComponent.jsx'
@@ -240,14 +240,7 @@ const CircleOfFifths = () => {
       handleClosePrompt()
     } catch (error) {
       console.error('Failed to generate progression:', error)
-      // Fallback to placeholder progression
-      // const placeholderProgression = generatePlaceholderProgression(
-      //   selectedKey,
-      //   keyType,
-      //   sequenceLength
-      // )
-      // setSequence(placeholderProgression)
-      // setCurrentPosition(0)
+
       handleClosePrompt()
     } finally {
       setIsGenerating(false)
@@ -256,7 +249,7 @@ const CircleOfFifths = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ color: 'white', p: 3 }}>
+      <Box sx={{ p: 3 }}>
         <Box sx={{ margin: '0 auto', maxWidth: '1200px' }}>
           {/* Main Section - Full Width */}
           <Card sx={{ mb: 4 }}>
@@ -274,29 +267,29 @@ const CircleOfFifths = () => {
                   <Typography variant="h1">Chord progression helper</Typography>
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    {/* AI Generation Button */}
+                    <ButtonGroup>
+                      <Button
+                        onClick={() => setActiveView('circle')}
+                        variant={
+                          activeView === 'circle' ? 'contained' : 'outlined'
+                        }
+                      >
+                        <PanoramaFishEye />
+                      </Button>
+                      <Button
+                        onClick={() => setActiveView('line')}
+                        variant={
+                          activeView === 'line' ? 'contained' : 'outlined'
+                        }
+                      >
+                        <LinearScale />
+                      </Button>
+                    </ButtonGroup>
+
                     <Button onClick={handleOpenPrompt} variant="contained">
                       <AutoAwesome />
                     </Button>
 
-                    {/* View Toggle */}
-
-                    <Button
-                      onClick={() => setActiveView('circle')}
-                      variant={
-                        activeView === 'circle' ? 'contained' : 'outlined'
-                      }
-                    >
-                      <PanoramaFishEye />
-                    </Button>
-                    <Button
-                      onClick={() => setActiveView('line')}
-                      variant={activeView === 'line' ? 'contained' : 'outlined'}
-                    >
-                      <LinearScale />
-                    </Button>
-
-                    {/* Speaker Button */}
                     {!isAudioInitialized && (
                       <Box
                         sx={{
@@ -366,6 +359,7 @@ const CircleOfFifths = () => {
                   onChordPreview={playChordPreview}
                   onChordRecord={recordChord}
                   onMouseLeave={handleMouseLeave}
+                  onKeyClick={handleKeyClick}
                 />
               )}
             </CardContent>
@@ -419,7 +413,6 @@ const CircleOfFifths = () => {
               onChange={e => setPromptText(e.target.value)}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  color: 'white',
                   '& fieldset': {
                     // borderColor: '#374151',
                   },
@@ -442,43 +435,53 @@ const CircleOfFifths = () => {
                 {[
                   {
                     label: 'Dreamy Synthwave',
-                    description: 'Create a dreamy synthwave progression with lush, atmospheric chords that evoke neon-lit cityscapes and nostalgic 80s vibes. Use warm, extended chords with subtle dissonance.'
+                    description:
+                      'Create a dreamy synthwave progression with lush, atmospheric chords that evoke neon-lit cityscapes and nostalgic 80s vibes. Use warm, extended chords with subtle dissonance.',
                   },
                   {
                     label: 'Modern Pop',
-                    description: 'Generate a modern pop chord progression with catchy, radio-friendly changes that feel contemporary and accessible. Include some unexpected but pleasing harmonic turns.'
+                    description:
+                      'Generate a modern pop chord progression with catchy, radio-friendly changes that feel contemporary and accessible. Include some unexpected but pleasing harmonic turns.',
                   },
                   {
                     label: 'Melancholic Indie',
-                    description: 'Design a melancholic indie progression with bittersweet, introspective chords that capture feelings of nostalgia and wistful longing. Use minor tonalities and unexpected resolutions.'
+                    description:
+                      'Design a melancholic indie progression with bittersweet, introspective chords that capture feelings of nostalgia and wistful longing. Use minor tonalities and unexpected resolutions.',
                   },
                   {
                     label: 'Upbeat Folk',
-                    description: 'Create an upbeat folk progression with warm, organic chord changes that feel like sunshine and open roads. Use simple but effective major tonalities with gentle movement.'
+                    description:
+                      'Create an upbeat folk progression with warm, organic chord changes that feel like sunshine and open roads. Use simple but effective major tonalities with gentle movement.',
                   },
                   {
                     label: 'Dark Ambient',
-                    description: 'Generate a dark ambient progression with mysterious, brooding chords that create an atmosphere of tension and uncertainty. Use minor keys with chromatic movement.'
+                    description:
+                      'Generate a dark ambient progression with mysterious, brooding chords that create an atmosphere of tension and uncertainty. Use minor keys with chromatic movement.',
                   },
                   {
                     label: 'Jazz Fusion',
-                    description: 'Design a jazz fusion progression with sophisticated, complex chord changes featuring extended harmonies, substitutions, and smooth voice leading that challenges and delights.'
+                    description:
+                      'Design a jazz fusion progression with sophisticated, complex chord changes featuring extended harmonies, substitutions, and smooth voice leading that challenges and delights.',
                   },
                   {
                     label: 'Nostalgic Ballad',
-                    description: 'Create a nostalgic ballad progression with emotional, heart-tugging chord changes that tell a story of love, loss, and memory. Use classic progressions with modern touches.'
+                    description:
+                      'Create a nostalgic ballad progression with emotional, heart-tugging chord changes that tell a story of love, loss, and memory. Use classic progressions with modern touches.',
                   },
                   {
                     label: 'Energetic Rock',
-                    description: 'Generate an energetic rock progression with powerful, driving chord changes that pump up the energy and create momentum. Use strong root movements and dynamic shifts.'
+                    description:
+                      'Generate an energetic rock progression with powerful, driving chord changes that pump up the energy and create momentum. Use strong root movements and dynamic shifts.',
                   },
                   {
                     label: 'Chill Lo-fi',
-                    description: 'Design a chill lo-fi progression with laid-back, smooth chord changes that create a relaxed, study-friendly atmosphere. Use jazz-influenced harmonies with a mellow feel.'
+                    description:
+                      'Design a chill lo-fi progression with laid-back, smooth chord changes that create a relaxed, study-friendly atmosphere. Use jazz-influenced harmonies with a mellow feel.',
                   },
                   {
                     label: 'Epic Cinematic',
-                    description: 'Create an epic cinematic progression with grand, sweeping chord changes that build drama and emotion like a movie soundtrack. Use wide intervals and powerful resolutions.'
+                    description:
+                      'Create an epic cinematic progression with grand, sweeping chord changes that build drama and emotion like a movie soundtrack. Use wide intervals and powerful resolutions.',
                   },
                 ].map(suggestion => (
                   <Button
