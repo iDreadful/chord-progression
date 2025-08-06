@@ -58,26 +58,20 @@ const SequenceRecorder = ({
           sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(8, minmax(10px, 1fr))',
-            gap: 1,
+            gap: 2,
           }}
         >
           {sequence.map((chord, index) => (
-            <Paper
+            <Button
               key={index}
               elevation={currentPosition === index ? 4 : 1}
-              sx={{
-                position: 'relative',
+              sx={theme => ({
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-
-                padding: '12px',
+                padding: theme.spacing(1),
                 textAlign: 'center',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
-                minWidth: '25%',
-                minHeight: '60px',
+                minHeight: 60,
                 background:
                   playbackPosition === index
                     ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
@@ -88,10 +82,7 @@ const SequenceRecorder = ({
                     : 'linear-gradient(145deg, #1f2937 0%, #374151 100%)',
                 color: 'white',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                '&:hover': {
-                  elevation: 3,
-                },
-              }}
+              })}
               onMouseEnter={() =>
                 chord && onChordPreview(chord.chord, chord.roman)
               }
@@ -100,16 +91,18 @@ const SequenceRecorder = ({
             >
               {chord ? (
                 <>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    {chord.roman}
+                  <Typography variant="body2">
+                    <b>{chord.roman}</b>
                   </Typography>
-                  <Typography variant="caption">{chord.chord}</Typography>
+                  <Typography variant="body2">
+                    <b>{chord.chord}</b>
+                  </Typography>
                   <IconButton
                     size="small"
                     sx={{
                       position: 'absolute',
-                      top: -8,
-                      right: -8,
+                      top: -10,
+                      right: -10,
                       backgroundColor: 'error.main',
                       color: 'white',
                       width: 20,
@@ -131,7 +124,7 @@ const SequenceRecorder = ({
                   Empty
                 </Typography>
               )}
-            </Paper>
+            </Button>
           ))}
         </Box>
       </Box>

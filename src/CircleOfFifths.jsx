@@ -9,6 +9,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -274,17 +275,8 @@ const CircleOfFifths = () => {
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     {/* AI Generation Button */}
-                    <Button
-                      onClick={handleOpenPrompt}
-                      variant="contained"
-                      startIcon={<AutoAwesome />}
-                      sx={theme => ({
-                        borderColor: '#a78bfa',
-                        paddingLeft: theme.spacing(2),
-                        paddingRight: theme.spacing(2),
-                      })}
-                    >
-                      Generate
+                    <Button onClick={handleOpenPrompt} variant="contained">
+                      <AutoAwesome />
                     </Button>
 
                     {/* View Toggle */}
@@ -410,14 +402,12 @@ const CircleOfFifths = () => {
           maxWidth="sm"
           fullWidth
         >
-          <DialogTitle>Generate Chord Progression</DialogTitle>
-          <DialogContent>
-            <Box sx={{ mb: 2, color: '#cbd5e1', fontSize: '14px' }}>
-              <Typography variant="body2">
-                Current settings: {selectedKey} {keyType} • {sequenceLength}{' '}
-                chords
-              </Typography>
-            </Box>
+          <DialogTitle>
+            Generate Chord Progression ({selectedKey} {keyType} /{' '}
+            {sequenceLength} chords)
+          </DialogTitle>
+          <DialogContent dividers>
+            <Box sx={{ mb: 2, color: '#cbd5e1', fontSize: '14px' }}></Box>
             <TextField
               autoFocus
               multiline
@@ -445,6 +435,67 @@ const CircleOfFifths = () => {
                 },
               }}
             />
+
+            {/* Suggested Prompts */}
+            <Box sx={{ mt: 2 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {[
+                  {
+                    label: 'Dreamy Synthwave',
+                    description: 'Create a dreamy synthwave progression with lush, atmospheric chords that evoke neon-lit cityscapes and nostalgic 80s vibes. Use warm, extended chords with subtle dissonance.'
+                  },
+                  {
+                    label: 'Modern Pop',
+                    description: 'Generate a modern pop chord progression with catchy, radio-friendly changes that feel contemporary and accessible. Include some unexpected but pleasing harmonic turns.'
+                  },
+                  {
+                    label: 'Melancholic Indie',
+                    description: 'Design a melancholic indie progression with bittersweet, introspective chords that capture feelings of nostalgia and wistful longing. Use minor tonalities and unexpected resolutions.'
+                  },
+                  {
+                    label: 'Upbeat Folk',
+                    description: 'Create an upbeat folk progression with warm, organic chord changes that feel like sunshine and open roads. Use simple but effective major tonalities with gentle movement.'
+                  },
+                  {
+                    label: 'Dark Ambient',
+                    description: 'Generate a dark ambient progression with mysterious, brooding chords that create an atmosphere of tension and uncertainty. Use minor keys with chromatic movement.'
+                  },
+                  {
+                    label: 'Jazz Fusion',
+                    description: 'Design a jazz fusion progression with sophisticated, complex chord changes featuring extended harmonies, substitutions, and smooth voice leading that challenges and delights.'
+                  },
+                  {
+                    label: 'Nostalgic Ballad',
+                    description: 'Create a nostalgic ballad progression with emotional, heart-tugging chord changes that tell a story of love, loss, and memory. Use classic progressions with modern touches.'
+                  },
+                  {
+                    label: 'Energetic Rock',
+                    description: 'Generate an energetic rock progression with powerful, driving chord changes that pump up the energy and create momentum. Use strong root movements and dynamic shifts.'
+                  },
+                  {
+                    label: 'Chill Lo-fi',
+                    description: 'Design a chill lo-fi progression with laid-back, smooth chord changes that create a relaxed, study-friendly atmosphere. Use jazz-influenced harmonies with a mellow feel.'
+                  },
+                  {
+                    label: 'Epic Cinematic',
+                    description: 'Create an epic cinematic progression with grand, sweeping chord changes that build drama and emotion like a movie soundtrack. Use wide intervals and powerful resolutions.'
+                  },
+                ].map(suggestion => (
+                  <Button
+                    key={suggestion.label}
+                    variant="contained"
+                    size="small"
+                    onClick={() => setPromptText(suggestion.description)}
+                    sx={theme => ({
+                      paddingLeft: theme.spacing(1),
+                      paddingRight: theme.spacing(1),
+                    })}
+                  >
+                    {suggestion.label}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClosePrompt} disabled={isGenerating}>
