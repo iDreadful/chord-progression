@@ -1,6 +1,13 @@
-import { VolumeUp } from '@mui/icons-material'
+import {
+  Circle,
+  LinearScale,
+  PanoramaFishEye,
+  VolumeUp,
+} from '@mui/icons-material'
 import {
   Box,
+  Button,
+  ButtonGroup,
   Card,
   CardContent,
   IconButton,
@@ -25,6 +32,7 @@ const CircleOfFifths = () => {
   const [synth, setSynth] = useState(null)
   const [selectedChord, setSelectedChord] = useState(null)
   const [lastHoveredChord, setLastHoveredChord] = useState(null)
+  const [activeView, setActiveView] = useState('circle') // 'circle' or 'line'
 
   // Sequence recording state
   const [sequenceLength, setSequenceLength] = useState(8)
@@ -196,40 +204,41 @@ const CircleOfFifths = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ color: 'white', p: 3 }}>
-        <Box sx={{ margin: '0 auto' }}>
-          {/* First Row: Circle and Sequencer */}
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '32px',
-              marginBottom: '32px',
-            }}
-          >
-            {/* Circle Section - Left 50% */}
-            <Card>
-              <CardContent sx={{ p: 3 }}>
-                <Box sx={{ textAlign: 'center', marginBottom: '24px' }}>
-                  <Typography variant="h1" sx={{ mb: 3 }}>
-                    Circle of Fifths
-                  </Typography>
+        <Box sx={{ margin: '0 auto', maxWidth: '1200px' }}>
+          {/* Main Section - Full Width */}
+          <Card sx={{ mb: 4 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ marginBottom: '24px' }}>
+                {/* Title and Controls Row */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mb: 3,
+                  }}
+                >
+                  <Typography variant="h1">Chord progression helper</Typography>
 
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 2,
-                      mb: 3,
-                    }}
-                  >
-                    <ModeSelector
-                      keyType={keyType}
-                      onModeChange={handleModeChange}
-                    />
-                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* View Toggle */}
 
-                  <Box>
+                    <Button
+                      onClick={() => setActiveView('circle')}
+                      variant={
+                        activeView === 'circle' ? 'contained' : 'outlined'
+                      }
+                    >
+                      <PanoramaFishEye />
+                    </Button>
+                    <Button
+                      onClick={() => setActiveView('line')}
+                      variant={activeView === 'line' ? 'contained' : 'outlined'}
+                    >
+                      <LinearScale />
+                    </Button>
+
+                    {/* Speaker Button */}
                     {!isAudioInitialized && (
                       <IconButton
                         size="small"
@@ -247,6 +256,23 @@ const CircleOfFifths = () => {
                   </Box>
                 </Box>
 
+                {/* Mode Selector - Centered */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mb: 3,
+                  }}
+                >
+                  <ModeSelector
+                    keyType={keyType}
+                    onModeChange={handleModeChange}
+                  />
+                </Box>
+              </Box>
+
+              {/* Conditional Content Based on Active View */}
+              {activeView === 'circle' ? (
                 <CircleComponent
                   keyType={keyType}
                   selectedKey={selectedKey}
@@ -256,30 +282,7 @@ const CircleOfFifths = () => {
                   onChordRecord={recordChord}
                   onMouseLeave={handleMouseLeave}
                 />
-
-                <Box
-                  sx={{
-                    textAlign: 'center',
-                    marginTop: '16px',
-                    fontSize: '14px',
-                    color: '#cbd5e1',
-                  }}
-                >
-                  {!isAudioInitialized && (
-                    <Typography
-                      variant="body2"
-                      sx={{ mt: 1, color: '#f59e0b' }}
-                    >
-                      💡 Click "Enable Audio" to hear chord previews on hover
-                    </Typography>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-
-            {/* Second Row: Chord Progression Section - Full Width */}
-            <Card>
-              <CardContent sx={{ p: 3 }}>
+              ) : (
                 <ChordProgressions
                   keyType={keyType}
                   selectedKey={selectedKey}
@@ -288,10 +291,26 @@ const CircleOfFifths = () => {
                   onChordRecord={recordChord}
                   onMouseLeave={handleMouseLeave}
                 />
-              </CardContent>
-            </Card>
-          </Box>
-          {/* Sequence Recorder - Right 50% */}
+              )}
+
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  marginTop: '16px',
+                  fontSize: '14px',
+                  color: '#cbd5e1',
+                }}
+              >
+                {!isAudioInitialized && (
+                  <Typography variant="body2" sx={{ mt: 1, color: '#f59e0b' }}>
+                    💡 Click "Enable Audio" to hear chord previews on hover
+                  </Typography>
+                )}
+              </Box>
+            </CardContent>
+          </Card>
+
+          {/* Sequence Recorder - Full Width */}
           <Card>
             <CardContent sx={{ p: 3 }}>
               <SequenceRecorder

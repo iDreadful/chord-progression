@@ -45,6 +45,7 @@ const SequenceRecorder = ({
             key={length}
             onClick={() => onSequenceLengthChange(length)}
             variant={sequenceLength === length ? 'contained' : 'outlined'}
+            sx={{ width: 50 }}
           >
             {length}
           </Button>
@@ -56,8 +57,7 @@ const SequenceRecorder = ({
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(16, minmax(10px, 1fr))',
-
+            gridTemplateColumns: 'repeat(8, minmax(10px, 1fr))',
             gap: 1,
           }}
         >
@@ -147,7 +147,6 @@ const SequenceRecorder = ({
         <Button
           onClick={onSequencePlay}
           variant="contained"
-          color={isPlaying ? 'error' : 'success'}
           sx={theme => ({ padding: theme.spacing(1, 2) })}
           startIcon={isPlaying ? <Stop /> : <PlayArrow />}
         >
