@@ -10,6 +10,7 @@ import {
   ButtonGroup,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -156,6 +157,12 @@ const CircleOfFifths = () => {
     setIsPlaying(true)
 
     const playChordAtPosition = async position => {
+      if (isPlaying) {
+        setIsPlaying(false)
+        setPlaybackPosition(-1)
+        return
+      }
+
       console.log(`Playing position ${position}`)
 
       if (position >= sequenceLength) {
@@ -249,11 +256,17 @@ const CircleOfFifths = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ p: 3 }}>
+      <Box
+        sx={{
+          p: 3,
+          minHeight: '100vh',
+          backgroundColor: 'background.default',
+        }}
+      >
         <Box sx={{ margin: '0 auto', maxWidth: '1200px' }}>
           {/* Main Section - Full Width */}
           <Card sx={{ mb: 4 }}>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: 4 }}>
               <Box sx={{ marginBottom: '24px' }}>
                 {/* Title and Controls Row */}
                 <Box
@@ -297,9 +310,9 @@ const CircleOfFifths = () => {
                           display: 'inline-block',
                         }}
                       >
-                        <IconButton
+                        <Button
                           size="small"
-                          color="error"
+                          variant="contained"
                           onClick={handleInitializeAudio}
                           sx={{
                             animation: 'ripple 2s infinite',
@@ -314,13 +327,13 @@ const CircleOfFifths = () => {
                           }}
                         >
                           <VolumeUp />
-                        </IconButton>
+                        </Button>
                       </Box>
                     )}
                     {isAudioInitialized && (
-                      <IconButton size="small" color="success">
+                      <Button size="small" variant="contained" color="success">
                         <VolumeUp />
-                      </IconButton>
+                      </Button>
                     )}
                   </Box>
                 </Box>
@@ -367,7 +380,7 @@ const CircleOfFifths = () => {
 
           {/* Sequence Recorder - Full Width */}
           <Card>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: 4 }}>
               <SequenceRecorder
                 sequence={sequence}
                 sequenceLength={sequenceLength}
@@ -401,7 +414,6 @@ const CircleOfFifths = () => {
             {sequenceLength} chords)
           </DialogTitle>
           <DialogContent dividers>
-            <Box sx={{ mb: 2, color: '#cbd5e1', fontSize: '14px' }}></Box>
             <TextField
               autoFocus
               multiline
@@ -411,27 +423,17 @@ const CircleOfFifths = () => {
               placeholder="Describe the chord progression you want... (e.g., 'sad and melancholic', 'uplifting pop progression', 'jazz-inspired with unexpected changes')"
               value={promptText}
               onChange={e => setPromptText(e.target.value)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    // borderColor: '#374151',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#6b7280',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#a78bfa',
-                  },
-                },
-                '& .MuiInputLabel-root': {
-                  color: '#9ca3af',
-                },
-              }}
             />
 
             {/* Suggested Prompts */}
             <Box sx={{ mt: 2 }}>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 2,
+                }}
+              >
                 {[
                   {
                     label: 'Dreamy Synthwave',
@@ -484,18 +486,16 @@ const CircleOfFifths = () => {
                       'Create an epic cinematic progression with grand, sweeping chord changes that build drama and emotion like a movie soundtrack. Use wide intervals and powerful resolutions.',
                   },
                 ].map(suggestion => (
-                  <Button
+                  <Chip
+                    clickable
+                    label={suggestion.label}
                     key={suggestion.label}
                     variant="contained"
-                    size="small"
                     onClick={() => setPromptText(suggestion.description)}
                     sx={theme => ({
-                      paddingLeft: theme.spacing(1),
-                      paddingRight: theme.spacing(1),
+                      fontSize: theme.typography.body2.fontSize,
                     })}
-                  >
-                    {suggestion.label}
-                  </Button>
+                  ></Chip>
                 ))}
               </Box>
             </Box>

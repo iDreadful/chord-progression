@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import {
   getCurrentChords,
   getCurrentKeys,
@@ -18,6 +18,8 @@ const ChordProgressions = ({
   const currentChords = getCurrentChords(keyType, selectedKey)
   const keys = getCurrentKeys(keyType)
 
+  const theme = useTheme()
+
   return (
     <Box>
       {/* Key selector */}
@@ -35,7 +37,7 @@ const ChordProgressions = ({
               key={key}
               variant={key === selectedKey ? 'contained' : 'outlined'}
               onClick={() => onKeyClick(key)}
-              sx={{ width: 30 }}
+              sx={{ width: 45 }}
             >
               {key}
             </Button>
@@ -77,29 +79,17 @@ const ChordProgressions = ({
               suggestions && suggestions.weak.includes(romanNumeral)
 
             let backgroundColor = '#ffffff'
-            let boxShadow =
-              '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
-            let borderColor = 'rgba(0, 0, 0, 0.05)'
             let textColor = '#374151'
             let variant = 'contained'
 
             if (isSelected) {
-              backgroundColor = '#4f46e5'
-              boxShadow =
-                '0 6px 16px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              borderColor = '#3730a3'
+              backgroundColor = theme.palette.info.main
               textColor = '#ffffff'
             } else if (isStrongSuggestion) {
-              backgroundColor = '#059669'
-              boxShadow =
-                '0 6px 16px rgba(5, 150, 105, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              borderColor = '#047857'
+              backgroundColor = theme.palette.success.main
               textColor = '#ffffff'
             } else if (isWeakSuggestion) {
-              backgroundColor = '#d97706'
-              boxShadow =
-                '0 6px 16px rgba(217, 119, 6, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              borderColor = '#b45309'
+              backgroundColor = theme.palette.warning.main
               textColor = '#ffffff'
             }
 
@@ -116,18 +106,10 @@ const ChordProgressions = ({
                   flexDirection: 'column',
                   textTransform: 'none',
                   background: backgroundColor,
-                  border: `1px solid ${borderColor}`,
-                  boxShadow: boxShadow,
                   color: textColor,
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
                     background: backgroundColor,
-                    transform: 'translateY(-2px)',
-                    boxShadow: `0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)`,
-                  },
-                  '&:active': {
-                    transform: 'translateY(0)',
-                    boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
                   },
                 }}
                 onMouseEnter={() => onChordPreview(chordNote, romanNumeral)}

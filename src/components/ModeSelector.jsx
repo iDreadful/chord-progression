@@ -16,11 +16,6 @@ const ModeSelector = ({ keyType, onModeChange }) => {
           key={modeKey}
           onClick={() => onModeChange(modeKey)}
           variant={keyType === modeKey ? 'contained' : 'outlined'}
-          sx={{
-            minWidth: '70px',
-            fontSize: '12px',
-            px: 1,
-          }}
         >
           {modeInfo.name}
         </Button>

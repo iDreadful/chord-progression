@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import {
   getCurrentKeys,
   getCurrentChords,
@@ -22,6 +22,8 @@ const CircleComponent = ({
   const radius = 140
   const centerX = 200
   const centerY = 200
+
+  const theme = useTheme()
 
   // Get all root notes from current key's chords for highlighting
   const chordRoots = currentChords.notes.map(chord => {
@@ -60,7 +62,10 @@ const CircleComponent = ({
             width: 400,
             height: 400,
             borderRadius: '50%',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
+            boxShadow: `
+            5px 5px 10px #bfc6d1,
+            -5px -5px 10px #ffffff
+          `,
           }}
         />
 
@@ -74,7 +79,7 @@ const CircleComponent = ({
             height: 280,
             borderRadius: '50%',
             translate: '-50% -50%',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
+            border: '1px solid rgba(0, 0, 0, 0.05)',
           }}
         />
 
@@ -88,7 +93,7 @@ const CircleComponent = ({
             height: 160,
             borderRadius: '50%',
             translate: '-50% -50%',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(0, 0, 0, 0.05)',
           }}
         />
       </Box>
@@ -118,24 +123,15 @@ const CircleComponent = ({
           suggestions && suggestions.weak.includes(romanNumeral)
 
         let backgroundColor = '#ffffff'
-        let boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
-        let borderColor = 'rgba(0, 0, 0, 0.05)'
         let textColor = '#374151'
-
         if (isSelected) {
-          backgroundColor = '#4f46e5'
-          boxShadow = '0 6px 16px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          borderColor = '#3730a3'
+          backgroundColor = theme.palette.info.main
           textColor = '#ffffff'
         } else if (isStrongSuggestion) {
-          backgroundColor = '#059669'
-          boxShadow = '0 6px 16px rgba(5, 150, 105, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          borderColor = '#047857'
+          backgroundColor = theme.palette.success.main
           textColor = '#ffffff'
         } else if (isWeakSuggestion) {
-          backgroundColor = '#d97706'
-          boxShadow = '0 6px 16px rgba(217, 119, 6, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          borderColor = '#b45309'
+          backgroundColor = theme.palette.warning.main
           textColor = '#ffffff'
         }
 
@@ -152,8 +148,7 @@ const CircleComponent = ({
               minWidth: 36,
               borderRadius: '50%',
               background: backgroundColor,
-              border: `1px solid ${borderColor}`,
-              boxShadow: boxShadow,
+              border: 'none',
               padding: 0,
               cursor: 'pointer',
               transition: 'all 0.2s ease-in-out',
@@ -162,12 +157,7 @@ const CircleComponent = ({
               alignItems: 'center',
               justifyContent: 'center',
               '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: `0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)`,
-              },
-              '&:active': {
-                transform: 'translateY(0)',
-                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+                background: backgroundColor,
               },
             }}
             onMouseEnter={() => onChordPreview(chord, romanNumeral)}
@@ -211,19 +201,13 @@ const CircleComponent = ({
         const isChordRoot = chordRoots.includes(keyRoot)
 
         let backgroundColor = '#ffffff'
-        let boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
-        let borderColor = 'rgba(0, 0, 0, 0.05)'
         let textColor = '#374151'
 
         if (isSelected) {
-          backgroundColor = '#4f46e5'
-          boxShadow = '0 6px 16px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          borderColor = '#3730a3'
+          backgroundColor = theme.palette.info.main
           textColor = '#ffffff'
         } else if (isChordRoot) {
-          backgroundColor = '#fbbf24'
-          boxShadow = '0 6px 16px rgba(251, 191, 36, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          borderColor = '#d97706'
+          backgroundColor = theme.palette.warning.main
           textColor = '#374151'
         }
 
@@ -240,25 +224,14 @@ const CircleComponent = ({
               minWidth: 50,
               borderRadius: '50%',
               background: backgroundColor,
-              border: `1px solid ${borderColor}`,
-              boxShadow: boxShadow,
               cursor: 'pointer',
-              transition: 'all 0.2s ease-in-out',
               '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: `0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)`,
-              },
-              '&:active': {
-                transform: 'translateY(0)',
-                boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+                background: backgroundColor,
               },
             }}
             onClick={() => onKeyClick(key)}
           >
-            <Typography
-              variant="body2"
-              sx={{ color: textColor, userSelect: 'none' }}
-            >
+            <Typography sx={{ color: textColor, userSelect: 'none' }}>
               <b>{key}</b>
             </Typography>
           </Button>
@@ -269,31 +242,25 @@ const CircleComponent = ({
       <Box
         sx={{
           position: 'absolute',
-          top: centerY - 25,
-          left: centerX - 70,
+          top: '50%',
+          left: '50%',
+          translate: '-50% -50%',
           width: 140,
           textAlign: 'center',
           pointerEvents: 'none',
         }}
       >
-        <Typography
-          variant="h2"
-          sx={{
-            fontWeight: 'bold',
-            color: '#1f2937',
-            userSelect: 'none',
-            lineHeight: 1.2,
-          }}
-        >
-          {selectedKey} {modes[keyType].name}
+        <Typography>
+          <b>
+            {selectedKey} {modes[keyType].name}
+          </b>
         </Typography>
         <Typography
-          variant="caption"
+          variant="body2"
           sx={{
             fontWeight: 'medium',
             color: '#6b7280',
             userSelect: 'none',
-            fontSize: '11px',
           }}
         >
           {modes[keyType].description}

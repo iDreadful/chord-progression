@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  IconButton,
-  Typography,
-} from '@mui/material'
+import { Box, Button, ButtonGroup, IconButton, Typography } from '@mui/material'
 import {
   CleaningServices,
   Close,
@@ -42,7 +36,7 @@ const SequenceRecorder = ({
             mb: 3,
           }}
         >
-          <Typography variant="h1">Chord Sequence Recorder</Typography>
+          <Typography variant="h1">Chord recorder</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <ButtonGroup>
@@ -51,23 +45,31 @@ const SequenceRecorder = ({
                   key={length}
                   onClick={() => onSequenceLengthChange(length)}
                   variant={sequenceLength === length ? 'contained' : 'outlined'}
-                  sx={{ width: 40 }}
                 >
                   {length}
                 </Button>
               ))}
             </ButtonGroup>
 
-            <Button onClick={onSequencePlay} variant="contained">
+            <Button
+              onClick={onSequencePlay}
+              variant="contained"
+              disabled={sequence.every(chord => chord === null)}
+            >
               {isPlaying ? <Stop /> : <PlayArrow />}
             </Button>
-            <Button onClick={onSequenceClear} size="small" variant="outlined">
+            <Button
+              onClick={onSequenceClear}
+              size="small"
+              variant="contained"
+              disabled={sequence.every(chord => chord === null)}
+            >
               <CleaningServices />
             </Button>
             <Button
               onClick={() => onDownloadMidi(selectedKey, keyType)}
               size="small"
-              variant="outlined"
+              variant="contained"
               color="primary"
               disabled={sequence.every(chord => chord === null)}
             >
@@ -77,7 +79,7 @@ const SequenceRecorder = ({
         </Box>
       </Box>
 
-      <Box sx={{ marginBottom: '24px', marginTop: 4 }}>
+      <Box sx={{ marginTop: 4 }}>
         <Box
           sx={{
             display: 'grid',
@@ -92,48 +94,28 @@ const SequenceRecorder = ({
               sx={theme => ({
                 display: 'flex',
                 flexDirection: 'column',
-                padding: theme.spacing(1),
+                padding: theme.spacing(2),
                 textAlign: 'center',
                 cursor: 'pointer',
-                minHeight: 60,
-                background:
-                  playbackPosition === index
-                    ? '#059669'
-                    : currentPosition === index
-                    ? '#d97706'
-                    : chord
-                    ? '#4f46e5'
-                    : '#ffffff',
-                border: `1px solid ${
-                  playbackPosition === index
-                    ? '#047857'
-                    : currentPosition === index
-                    ? '#b45309'
-                    : chord
-                    ? '#3730a3'
-                    : 'rgba(0, 0, 0, 0.05)'
-                }`,
+                aspectRatio: '1 / 1',
+                backgroundColor: '#e2e8f0',
+                border: 'none',
                 color:
-                  playbackPosition === index ||
-                  currentPosition === index ||
-                  chord
-                    ? 'white'
-                    : '#6b7280',
-                boxShadow:
-                  playbackPosition === index ||
-                  currentPosition === index ||
-                  chord
-                    ? '0 6px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                    : '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                  playbackPosition === index
+                    ? theme.palette.success.main
+                    : currentPosition === index
+                    ? theme.palette.warning.main
+                    : chord
+                    ? theme.palette.info.main
+                    : '#64748b',
+                borderRadius: 16,
                 transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow:
-                    '0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
-                },
+                boxShadow:
+                  currentPosition === index || playbackPosition === index
+                    ? `4px 4px 8px #bfc6d1, -4px -4px 8px #ffffff`
+                    : `inset 3px 3px 6px #bfc6d1, inset -3px -3px 6px #ffffff`,
                 '&:active': {
-                  transform: 'translateY(0)',
-                  boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+                  boxShadow: `inset 2px 2px 4px #bfc6d1, inset -2px -2px 4px #ffffff`,
                 },
               })}
               onMouseEnter={() =>
@@ -144,18 +126,18 @@ const SequenceRecorder = ({
             >
               {chord ? (
                 <>
-                  <Typography variant="body2">
+                  <Typography sx={{ lineHeight: 1 }}>
                     <b>{chord.roman}</b>
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography>
                     <b>{chord.chord}</b>
                   </Typography>
                   <IconButton
                     size="small"
                     sx={{
                       position: 'absolute',
-                      top: -10,
-                      right: -10,
+                      top: 0,
+                      right: 0,
                       backgroundColor: 'error.main',
                       color: 'white',
                       width: 20,
@@ -173,23 +155,14 @@ const SequenceRecorder = ({
                   </IconButton>
                 </>
               ) : (
-                <Typography variant="caption" sx={{ opacity: 0.5 }}>
-                  Empty
+                <Typography>
+                  <b>Empty</b>
                 </Typography>
               )}
             </Button>
           ))}
         </Box>
       </Box>
-
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          mb: 2,
-          justifyContent: 'center',
-        }}
-      ></Box>
     </Box>
   )
 }
