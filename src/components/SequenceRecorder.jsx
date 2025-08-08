@@ -75,7 +75,7 @@ const SequenceRecorder = ({
             mb: 3,
           }}
         >
-          <Typography variant="h1">Recorder</Typography>
+          <Typography variant="h2">Recorder</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button onClick={handleButtonClick} variant="contained">

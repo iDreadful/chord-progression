@@ -273,9 +273,13 @@ const CircleOfFifths = () => {
           p: 3,
           minHeight: '100vh',
           backgroundColor: 'background.default',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Box sx={{ margin: '0 auto', maxWidth: '1200px' }}>
+        <Box sx={{ width: 695 }}>
           {/* Main Section - Full Width */}
           <Card sx={{ mb: 4 }}>
             <CardContent sx={{ p: 4 }}>
@@ -289,7 +293,7 @@ const CircleOfFifths = () => {
                     mb: 3,
                   }}
                 >
-                  <Typography variant="h1">Chord progression helper</Typography>
+                  <Typography variant="h2">Chord progression helper</Typography>
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <ButtonGroup>
