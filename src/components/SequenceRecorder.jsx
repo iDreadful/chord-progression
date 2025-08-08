@@ -21,7 +21,6 @@ import {
   Stop,
   Piano,
 } from '@mui/icons-material'
-
 const SequenceRecorder = ({
   sequence,
   sequenceLength,
@@ -46,15 +45,12 @@ const SequenceRecorder = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const openPopover = Boolean(anchorEl)
-
   const handleButtonClick = event => {
     setAnchorEl(event.currentTarget)
   }
-
   const handleClosePopover = () => {
     setAnchorEl(null)
   }
-
   const handleProgressionSelect = progressionIndex => {
     onProgressionChange(progressionIndex)
     if (progressionIndex !== '' && progressionIndex !== null) {
@@ -62,11 +58,9 @@ const SequenceRecorder = ({
     }
     handleClosePopover()
   }
-
   return (
     <Box>
       <Box sx={{ marginBottom: '24px' }}>
-        {/* Title and Controls Row */}
         <Box
           sx={{
             display: 'flex',
@@ -76,12 +70,10 @@ const SequenceRecorder = ({
           }}
         >
           <Typography variant="h2">Recorder</Typography>
-
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button onClick={handleButtonClick} variant="contained">
               <Piano />
             </Button>
-
             <Popover
               open={openPopover}
               anchorEl={anchorEl}
@@ -118,11 +110,9 @@ const SequenceRecorder = ({
                 ))}
               </List>
             </Popover>
-
             <Button onClick={onRandomProgression} variant="contained">
               <Casino />
             </Button>
-
             <ButtonGroup>
               {[4, 8, 12, 16].map(length => (
                 <Button
@@ -134,7 +124,6 @@ const SequenceRecorder = ({
                 </Button>
               ))}
             </ButtonGroup>
-
             <Button
               onClick={onSequencePlay}
               variant="contained"
@@ -162,7 +151,6 @@ const SequenceRecorder = ({
           </Box>
         </Box>
       </Box>
-
       <Box sx={{ marginTop: 4 }}>
         <Box
           sx={{
@@ -250,5 +238,4 @@ const SequenceRecorder = ({
     </Box>
   )
 }
-
 export default SequenceRecorder

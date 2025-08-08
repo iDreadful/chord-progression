@@ -1,6 +1,5 @@
 import { Box, Button } from '@mui/material'
 import { modes } from '../utils/musicData.js'
-
 const ModeSelector = ({ keyType, onModeChange }) => {
   return (
     <Box
@@ -23,5 +22,4 @@ const ModeSelector = ({ keyType, onModeChange }) => {
     </Box>
   )
 }
-
 export default ModeSelector

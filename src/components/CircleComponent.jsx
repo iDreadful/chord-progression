@@ -7,7 +7,6 @@ import {
   getNextChordSuggestions,
 } from '../utils/musicUtils.js'
 import { modes } from '../utils/musicData.js'
-
 const CircleComponent = ({
   keyType,
   selectedKey,
@@ -22,15 +21,11 @@ const CircleComponent = ({
   const radius = 140
   const centerX = 200
   const centerY = 200
-
   const theme = useTheme()
-
-  // Get all root notes from current key's chords for highlighting
   const chordRoots = currentChords.notes.map(chord => {
     let root = getChordRoot(chord)
     return normalizeNote(root)
   })
-
   return (
     <Box
       sx={{
@@ -42,7 +37,6 @@ const CircleComponent = ({
         margin: '0 auto',
       }}
     >
-      {/* Background circles */}
       <Box
         sx={{
           position: 'absolute',
@@ -53,7 +47,6 @@ const CircleComponent = ({
           pointerEvents: 'none',
         }}
       >
-        {/* Outer circle */}
         <Box
           sx={{
             position: 'absolute',
@@ -68,8 +61,6 @@ const CircleComponent = ({
           `,
           }}
         />
-
-        {/* Middle circle */}
         <Box
           sx={{
             position: 'absolute',
@@ -82,8 +73,6 @@ const CircleComponent = ({
             border: '1px solid rgba(0, 0, 0, 0.05)',
           }}
         />
-
-        {/* Inner circle */}
         <Box
           sx={{
             position: 'absolute',
@@ -97,21 +86,14 @@ const CircleComponent = ({
           }}
         />
       </Box>
-
-      {/* Chord positions in inner circle */}
       {currentChords.notes.map((chord, index) => {
         const chordRadius = radius - 60
-
-        // Find the position of the selected key in the outer circle
         const selectedKeyIndex = keys.indexOf(selectedKey)
-        const selectedKeyAngle = selectedKeyIndex * 30 - 90 // Angle of selected key
-
-        // Calculate angle for this chord, with tonic (index 0) aligned to selected key
-        const chordAngle = selectedKeyAngle + index * 51.43 // 360/7 = 51.43 degrees apart
+        const selectedKeyAngle = selectedKeyIndex * 30 - 90 
+        const chordAngle = selectedKeyAngle + index * 51.43 
         const radian = (chordAngle * Math.PI) / 180
         const x = centerX + chordRadius * Math.cos(radian)
         const y = centerY + chordRadius * Math.sin(radian)
-
         const romanNumeral = currentChords.roman[index]
         const isSelected = selectedChord === romanNumeral
         const suggestions = selectedChord
@@ -121,7 +103,6 @@ const CircleComponent = ({
           suggestions && suggestions.strong.includes(romanNumeral)
         const isWeakSuggestion =
           suggestions && suggestions.weak.includes(romanNumeral)
-
         let backgroundColor = '#ffffff'
         let textColor = '#374151'
         if (isSelected) {
@@ -134,7 +115,6 @@ const CircleComponent = ({
           backgroundColor = theme.palette.warning.main
           textColor = '#ffffff'
         }
-
         return (
           <Button
             key={`chord-${index}`}
@@ -188,21 +168,16 @@ const CircleComponent = ({
           </Button>
         )
       })}
-
-      {/* Key positions in outer circle */}
       {keys.map((key, index) => {
-        const angle = index * 30 - 90 // Start from top, 30 degrees apart
+        const angle = index * 30 - 90 
         const radian = (angle * Math.PI) / 180
         const x = centerX + radius * Math.cos(radian)
         const y = centerY + radius * Math.sin(radian)
-
         const isSelected = key === selectedKey
         const keyRoot = key.replace('m', '')
         const isChordRoot = chordRoots.includes(keyRoot)
-
         let backgroundColor = '#ffffff'
         let textColor = '#374151'
-
         if (isSelected) {
           backgroundColor = theme.palette.info.main
           textColor = '#ffffff'
@@ -210,7 +185,6 @@ const CircleComponent = ({
           backgroundColor = theme.palette.warning.main
           textColor = '#374151'
         }
-
         return (
           <Button
             key={key}
@@ -237,8 +211,6 @@ const CircleComponent = ({
           </Button>
         )
       })}
-
-      {/* Center label */}
       <Box
         sx={{
           position: 'absolute',
@@ -269,5 +241,4 @@ const CircleComponent = ({
     </Box>
   )
 }
-
 export default CircleComponent

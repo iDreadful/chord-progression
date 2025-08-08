@@ -1,6 +1,4 @@
 import { createTheme } from '@mui/material'
-
-// Create neomorphic light theme
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -30,8 +28,8 @@ const theme = createTheme({
       dark: '#dc2626',
     },
     background: {
-      default: '#e2e8f0', // Neomorphic background
-      paper: '#e2e8f0', // Same as background for seamless look
+      default: '#e2e8f0',
+      paper: '#e2e8f0',
     },
     text: {
       primary: '#1e293b',
@@ -39,7 +37,7 @@ const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 20, // Rounded corners for neomorphic look
+    borderRadius: 20,
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -83,12 +81,6 @@ const theme = createTheme({
             9px 9px 18px #bfc6d1,
             -9px -9px 18px #ffffff
           `,
-          // '&:hover': {
-          //   boxShadow: `
-          //     5px 5px 10px #bfc6d1,
-          //     -5px -5px 10px #ffffff
-          //   `,
-          // },
         },
       },
     },
@@ -172,10 +164,6 @@ const theme = createTheme({
           backgroundImage: 'none',
           borderRadius: 16,
           border: 'none',
-          // boxShadow: `
-          //   6px 6px 12px #bfc6d1,
-          //   -6px -6px 12px #ffffff
-          // `,
         },
       },
     },
@@ -194,21 +182,6 @@ const theme = createTheme({
             -4px -4px 8px #ffffff
           `,
           transition: 'all 0.2s ease-in-out',
-          // '&:hover': {
-          //   backgroundColor: '#e2e8f0',
-          //   boxShadow: `
-          //     2px 2px 4px #bfc6d1,
-          //     -2px -2px 4px #ffffff
-          //   `,
-          //   transform: 'scale(0.95)',
-          // },
-          // '&:active': {
-          //   boxShadow: `
-          //     inset 2px 2px 4px #bfc6d1,
-          //     inset -2px -2px 4px #ffffff
-          //   `,
-          //   transform: 'scale(0.92)',
-          // },
         },
       },
     },
@@ -268,5 +241,4 @@ const theme = createTheme({
     },
   },
 })
-
 export default theme

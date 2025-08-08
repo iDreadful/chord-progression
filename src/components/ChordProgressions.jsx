@@ -5,7 +5,6 @@ import {
   getNextChordSuggestions,
 } from '../utils/musicUtils.js'
 import { modes } from '../utils/musicData.js'
-
 const ChordProgressions = ({
   keyType,
   selectedKey,
@@ -17,12 +16,9 @@ const ChordProgressions = ({
 }) => {
   const currentChords = getCurrentChords(keyType, selectedKey)
   const keys = getCurrentKeys(keyType)
-
   const theme = useTheme()
-
   return (
     <Box>
-      {/* Key selector */}
       <Box sx={{ mb: 3 }}>
         <Box
           sx={{
@@ -44,8 +40,6 @@ const ChordProgressions = ({
           ))}
         </Box>
       </Box>
-
-      {/* Chord selector */}
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h6"
@@ -58,7 +52,6 @@ const ChordProgressions = ({
         >
           {selectedKey} {modes[keyType].name}
         </Typography>
-
         <Box
           sx={{
             display: 'flex',
@@ -77,11 +70,9 @@ const ChordProgressions = ({
               suggestions && suggestions.strong.includes(romanNumeral)
             const isWeakSuggestion =
               suggestions && suggestions.weak.includes(romanNumeral)
-
             let backgroundColor = '#ffffff'
             let textColor = '#374151'
             let variant = 'contained'
-
             if (isSelected) {
               backgroundColor = theme.palette.info.main
               textColor = '#ffffff'
@@ -92,7 +83,6 @@ const ChordProgressions = ({
               backgroundColor = theme.palette.warning.main
               textColor = '#ffffff'
             }
-
             return (
               <Button
                 key={`chord-${index}`}
@@ -133,5 +123,4 @@ const ChordProgressions = ({
     </Box>
   )
 }
-
 export default ChordProgressions

@@ -1,11 +1,7 @@
 import { Midi } from '@tonejs/midi'
 import { modes } from './musicData.js'
-
-// Convert chord name to MIDI notes
 export const chordToMidiNotes = chordName => {
   const root = chordName.replace(/[m°#b]/g, '')
-
-  // Note to MIDI mapping (C4 = 60)
   const noteToMidi = {
     C: 60,
     'C#': 61,
@@ -25,73 +21,50 @@ export const chordToMidiNotes = chordName => {
     Bb: 70,
     B: 71,
   }
-
   const rootMidi = noteToMidi[root]
   if (!rootMidi) return []
-
   let notes = [rootMidi]
-
   if (chordName.includes('m') && !chordName.includes('°')) {
-    // Minor chord: root, minor third, fifth
     notes.push(rootMidi + 3)
-    notes.push(rootMidi + 7) // fifth
+    notes.push(rootMidi + 7) 
   } else if (chordName.includes('°')) {
-    // Diminished chord: root, minor third, diminished fifth
-    notes.push(rootMidi + 3) // minor third
-    notes.push(rootMidi + 6) // diminished fifth
+    notes.push(rootMidi + 3) 
+    notes.push(rootMidi + 6) 
   } else {
-    // Major chord: root, major third, fifth
-    notes.push(rootMidi + 4) // major third
-    notes.push(rootMidi + 7) // fifth
+    notes.push(rootMidi + 4) 
+    notes.push(rootMidi + 7) 
   }
-
   return notes
 }
-
 export const downloadMidiSequence = (sequence, selectedKey, keyType) => {
-  // Create a new MIDI object
   const midi = new Midi()
-
-  // Add a track
   const track = midi.addTrack()
-
-  // Set tempo for proper timing
-  midi.header.setTempo(120) // 120 BPM
-
-  // Add chords to the track
+  midi.header.setTempo(120) 
   let time = 0
-  const barsPerChord = 1 // Each chord spans exactly 1 bar
-  const beatsPerBar = 4 // 4/4 time signature
-  const secondsPerBeat = 60 / 120 // 0.5 seconds per beat at 120 BPM
-  const chordDuration = barsPerChord * beatsPerBar * secondsPerBeat // 2 seconds per bar
-
+  const barsPerChord = 1 
+  const beatsPerBar = 4 
+  const secondsPerBeat = 60 / 120 
+  const chordDuration = barsPerChord * beatsPerBar * secondsPerBeat 
   sequence.forEach((chord, index) => {
     if (chord && chord.chord) {
       const midiNotes = chordToMidiNotes(chord.chord)
-
-      // Add each note of the chord
       midiNotes.forEach(noteNumber => {
         track.addNote({
           midi: noteNumber,
           time: time,
-          duration: chordDuration, // Full bar duration
+          duration: chordDuration, 
         })
       })
     }
     time += chordDuration
   })
-
-  // Create and download the file
   const array = midi.toArray()
   const blob = new Blob([array], { type: 'audio/midi' })
   const url = URL.createObjectURL(blob)
-
-  // Extract chord names from sequence for filename
   const chordNames = sequence
     .filter(chord => chord && chord.chord)
     .map(chord => chord.chord)
     .join(',')
-
   const a = document.createElement('a')
   a.href = url
   a.download = `${chordNames}-${selectedKey}-${modes[
