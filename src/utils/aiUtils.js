@@ -1,3 +1,5 @@
+import { getCurrentChords } from './musicUtils.js'
+
 export const generateAIProgression = async (prompt, key, mode, length) => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 
@@ -6,27 +8,29 @@ export const generateAIProgression = async (prompt, key, mode, length) => {
     return generatePlaceholderProgression(key, mode, length)
   }
 
-  const systemPrompt = `You are a music theory expert specializing in chord progressions. Generate chord progressions based on user descriptions.
+  const systemPrompt = `You are a music theory expert. Generate chord progressions based on the user's description.
 
-Current musical context:
+Context:
 - Key: ${key}
 - Mode: ${mode}
 - Sequence length: ${length} chords
 - Style/Mood: ${prompt}
 
-Return your response as a JSON array of objects with exactly this example format:
+Output format (STRICT):
+{
+  "progression": [
+    { "degree": 1, "roman": "I" },
+    { "degree": 5, "roman": "V" }
+    // ... exactly ${length} items total
+  ]
+}
 
-[
-  {"chord": "C", "roman": "I"},
-  {"chord": "Fm", "roman": "IV"}, 
-  ...
-]
-
-Rules:
-- Provide exactly ${length} chord objects
-- Use proper chord notation (e.g., "C", "Dm", "Em", "F", "G", "Am", "Bº")
-- Use correct Roman numeral analysis for the key and mode
-- Make chord progressions musically sensible and appropriate for the requested style/mood`
+Hard rules:
+- Provide exactly ${length} items.
+- Do NOT include chord names, qualities, or extensions in the output. Absolutely no fields like "chord", "name", "notes", "maj", "min", "dim", "7", "sus", "add", or slash chords.
+- Use only diatonic triads of the specified key/mode. Represent them by scale degree (1-7) and correct Roman numerals (use case for quality and the ° sign for diminished where appropriate).
+- For C Ionian, for example, the diatonic triads are exactly: C, Dm, Em, F, G, Am, B°.
+- For other keys/modes, use the corresponding diatonic set. Keep responses musical and match the requested style.`
 
   try {
     const response = await fetch(
@@ -52,22 +56,35 @@ Rules:
     }
 
     const data = await response.json()
-    const generatedText = data.choices[0].message.content.trim()
+    const generatedText = data.choices?.[0]?.message?.content?.trim?.() || ''
     console.log(generatedText)
 
-    // Parse the JSON response
-    const progression =
-      JSON.parse(generatedText).chords ||
-      JSON.parse(generatedText).progression ||
-      JSON.parse(generatedText).chord_progression ||
-      []
-
-    // Validate the response format
-    if (!Array.isArray(progression) || progression.length !== length) {
-      throw new Error('Invalid response format from OpenAI')
+    // Parse the JSON response, tolerating a few schema variants
+    let parsed
+    try {
+      parsed = JSON.parse(generatedText)
+    } catch (e) {
+      throw new Error('AI response was not valid JSON')
     }
 
-    return progression
+    let raw = []
+    if (Array.isArray(parsed)) raw = parsed
+    else if (Array.isArray(parsed.progression)) raw = parsed.progression
+    else if (Array.isArray(parsed.chords)) raw = parsed.chords
+    else if (Array.isArray(parsed.chord_progression))
+      raw = parsed.chord_progression
+
+    if (!Array.isArray(raw) || raw.length !== length) {
+      throw new Error('Invalid response format from AI')
+    }
+
+    // Map to playable chords using local diatonic data
+    const mapped = mapToPlayableProgression(raw, key, mode)
+    if (!Array.isArray(mapped) || mapped.length !== length) {
+      throw new Error('Failed to map AI progression to playable chords')
+    }
+
+    return mapped
   } catch (error) {
     console.error('OpenAI API error:', error)
     throw error
@@ -79,18 +96,47 @@ export const generatePlaceholderProgression = (
   keyType,
   sequenceLength
 ) => {
-  const progression = Array(sequenceLength).fill(null)
-  const commonProgressions = {
-    ionian: ['I', 'V', 'vi', 'IV', 'I', 'V', 'vi', 'IV'],
-    aeolian: ['i', 'VII', 'VI', 'VII', 'i', 'VII', 'VI', 'VII'],
+  const current = getCurrentChords(keyType, selectedKey)
+  const byDegreePatterns = {
+    ionian: [1, 5, 6, 4],
+    aeolian: [1, 7, 6, 7],
   }
 
-  const pattern = commonProgressions[keyType] || commonProgressions.ionian
-  for (let i = 0; i < sequenceLength; i++) {
-    const roman = pattern[i % pattern.length]
-    // This is simplified - in real implementation, you'd generate actual chord names
-    progression[i] = { chord: `${selectedKey}maj`, roman: roman }
-  }
+  const degPattern = byDegreePatterns[keyType] || byDegreePatterns.ionian
 
-  return progression
+  const result = Array.from({ length: sequenceLength }, (_, i) => {
+    const degree = degPattern[i % degPattern.length]
+    const idx = Math.max(0, Math.min(6, (degree || 1) - 1))
+    const chord = current.notes?.[idx] || current.notes?.[0] || selectedKey
+    const roman = current.roman?.[idx] || 'I'
+    return { chord, roman }
+  })
+
+  return result
+}
+
+// Helper: map AI output entries (with degree and/or roman) to playable chord objects
+const mapToPlayableProgression = (rawItems, key, mode) => {
+  const current = getCurrentChords(mode, key)
+  const normRoman = s =>
+    (s || '').toString().replace(/\s+/g, '').replace(/º/g, '°')
+
+  return rawItems.map(item => {
+    const degree = Number(item.degree)
+    let idx = Number.isFinite(degree)
+      ? Math.max(0, Math.min(6, degree - 1))
+      : -1
+
+    if (idx < 0 && item.roman) {
+      const target = normRoman(item.roman)
+      idx = (current.roman || []).findIndex(r => normRoman(r) === target)
+    }
+
+    if (idx < 0) idx = 0 // fallback to tonic
+
+    return {
+      chord: current.notes?.[idx] || current.notes?.[0] || key,
+      roman: current.roman?.[idx] || current.roman?.[0] || 'I',
+    }
+  })
 }
