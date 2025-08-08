@@ -679,3 +679,74 @@ export const chordProgressions = {
     },
   },
 }
+
+// Common chord progressions used in popular music
+export const commonProgressions = {
+  major: [
+    // I-V-vi-IV (pop punk progression)
+    { pattern: ['I', 'V', 'vi', 'IV'], name: 'Pop Punk' },
+    // vi-IV-I-V (pop progression)
+    { pattern: ['vi', 'IV', 'I', 'V'], name: 'Pop' },
+    // I-vi-IV-V (50s progression)
+    { pattern: ['I', 'vi', 'IV', 'V'], name: '50s Doo-Wop' },
+    // ii-V-I (jazz turnaround)
+    { pattern: ['ii', 'V', 'I'], name: 'Jazz Turnaround' },
+    // I-IV-V-I (classic)
+    { pattern: ['I', 'IV', 'V', 'I'], name: 'Classic' },
+    // I-V-vi-iii-IV-I-IV-V (Canon in D)
+    {
+      pattern: ['I', 'V', 'vi', 'iii', 'IV', 'I', 'IV', 'V'],
+      name: 'Canon in D',
+    },
+    // vi-V-IV-V (ballad)
+    { pattern: ['vi', 'V', 'IV', 'V'], name: 'Ballad' },
+    // I-iii-vi-IV (minor plagal)
+    { pattern: ['I', 'iii', 'vi', 'IV'], name: 'Minor Plagal' },
+    // I-bVII-IV-I (Mixolydian)
+    { pattern: ['I', 'bVII', 'IV', 'I'], name: 'Rock' },
+    // vi-ii-V-I (circle of fifths)
+    { pattern: ['vi', 'ii', 'V', 'I'], name: 'Circle of Fifths' },
+    // I-vi-ii-V (rhythm changes)
+    { pattern: ['I', 'vi', 'ii', 'V'], name: 'Rhythm Changes' },
+    // I-IV-vi-V (folk)
+    { pattern: ['I', 'IV', 'vi', 'V'], name: 'Folk' },
+    // iii-vi-ii-V (jazzy)
+    { pattern: ['iii', 'vi', 'ii', 'V'], name: 'Jazz Minor' },
+    // I-V-IV-IV (power ballad)
+    { pattern: ['I', 'V', 'IV', 'IV'], name: 'Power Ballad' },
+    // vi-iii-IV-I (emotional)
+    { pattern: ['vi', 'iii', 'IV', 'I'], name: 'Emotional' },
+  ],
+  minor: [
+    // i-bVII-bVI-bVII (Andalusian)
+    { pattern: ['i', 'bVII', 'bVI', 'bVII'], name: 'Andalusian' },
+    // i-iv-V-i (harmonic minor)
+    { pattern: ['i', 'iv', 'V', 'i'], name: 'Harmonic Minor' },
+    // i-bVI-bVII-i (natural minor)
+    { pattern: ['i', 'bVI', 'bVII', 'i'], name: 'Natural Minor' },
+    // i-v-bVI-iv (sad ballad)
+    { pattern: ['i', 'v', 'bVI', 'iv'], name: 'Sad Ballad' },
+    // i-bIII-bVII-iv (epic)
+    { pattern: ['i', 'bIII', 'bVII', 'iv'], name: 'Epic' },
+    // i-ii°-V-i (classical minor)
+    { pattern: ['i', 'ii°', 'V', 'i'], name: 'Classical Minor' },
+    // i-bVI-iv-V (dramatic)
+    { pattern: ['i', 'bVI', 'iv', 'V'], name: 'Dramatic' },
+    // i-v-iv-i (modal)
+    { pattern: ['i', 'v', 'iv', 'i'], name: 'Modal' },
+    // i-bVII-iv-i (folk minor)
+    { pattern: ['i', 'bVII', 'iv', 'i'], name: 'Folk Minor' },
+    // i-bIII-iv-v (melancholic)
+    { pattern: ['i', 'bIII', 'iv', 'v'], name: 'Melancholic' },
+    // i-iv-bVII-bVI (modern minor)
+    { pattern: ['i', 'iv', 'bVII', 'bVI'], name: 'Modern Minor' },
+    // i-bVI-bIII-bVII (rock minor)
+    { pattern: ['i', 'bVI', 'bIII', 'bVII'], name: 'Rock Minor' },
+    // i-v-bVI-bVII (sad progression)
+    { pattern: ['i', 'v', 'bVI', 'bVII'], name: 'Sad' },
+    // i-ii°-bVI-V (tension and release)
+    { pattern: ['i', 'ii°', 'bVI', 'V'], name: 'Tension and Release' },
+    // i-bIII-bVI-iv (dark)
+    { pattern: ['i', 'bIII', 'bVI', 'iv'], name: 'Dark' },
+  ],
+}

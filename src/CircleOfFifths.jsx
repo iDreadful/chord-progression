@@ -1,32 +1,28 @@
-import {
-  LinearScale,
-  PanoramaFishEye,
-  VolumeUp,
-  AutoAwesome,
-} from '@mui/icons-material'
+import { LinearScale, PanoramaFishEye, VolumeUp } from '@mui/icons-material'
 import {
   Box,
   Button,
   ButtonGroup,
   Card,
   CardContent,
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  TextField,
   ThemeProvider,
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
 import { initializeAudio, playChord } from './utils/audioUtils.js'
-import { getCurrentKeys } from './utils/musicUtils.js'
-import { majorKeys, minorKeys, modalKeys } from './utils/musicData.js'
+import {
+  getCurrentKeys,
+  generateRandomProgression,
+  generateSpecificProgression,
+} from './utils/musicUtils.js'
+import {
+  majorKeys,
+  minorKeys,
+  modalKeys,
+  commonProgressions,
+} from './utils/musicData.js'
 import { downloadMidiSequence } from './utils/midiUtils.js'
-import { generateAIProgression } from './utils/aiUtils.js'
 import CircleComponent from './components/CircleComponent.jsx'
 import ChordProgressions from './components/ChordProgressions.jsx'
 import ModeSelector from './components/ModeSelector.jsx'
@@ -42,17 +38,15 @@ const CircleOfFifths = () => {
   const [lastHoveredChord, setLastHoveredChord] = useState(null)
   const [activeView, setActiveView] = useState('circle') // 'circle' or 'line'
 
-  // Prompt modal state
-  const [isPromptOpen, setIsPromptOpen] = useState(false)
-  const [promptText, setPromptText] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
-
   // Sequence recording state
   const [sequenceLength, setSequenceLength] = useState(8)
   const [sequence, setSequence] = useState(Array(8).fill(null))
   const [currentPosition, setCurrentPosition] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackPosition, setPlaybackPosition] = useState(-1)
+
+  // Progression selection state
+  const [selectedProgression, setSelectedProgression] = useState(null)
 
   // Initialize audio context and synth
   const handleInitializeAudio = async () => {
@@ -220,22 +214,9 @@ const CircleOfFifths = () => {
     downloadMidiSequence(sequence, selectedKey, keyType)
   }
 
-  const handleOpenPrompt = () => {
-    setIsPromptOpen(true)
-  }
-
-  const handleClosePrompt = () => {
-    setIsPromptOpen(false)
-    setPromptText('')
-  }
-
-  const handleGenerateProgression = async () => {
-    setIsGenerating(true)
-
+  const handleGenerateRandomProgression = () => {
     try {
-      console.error('Generating progression:')
-      const progression = await generateAIProgression(
-        promptText,
+      const progression = generateRandomProgression(
         selectedKey,
         keyType,
         sequenceLength
@@ -244,13 +225,44 @@ const CircleOfFifths = () => {
       // Apply the generated progression to the sequence
       setSequence(progression)
       setCurrentPosition(0)
-      handleClosePrompt()
     } catch (error) {
-      console.error('Failed to generate progression:', error)
+      console.error('Failed to generate random progression:', error)
+    }
+  }
 
-      handleClosePrompt()
-    } finally {
-      setIsGenerating(false)
+  const handleGenerateSpecificProgression = progressionIndex => {
+    try {
+      const progression = generateSpecificProgression(
+        selectedKey,
+        keyType,
+        sequenceLength,
+        progressionIndex
+      )
+
+      // Apply the generated progression to the sequence
+      setSequence(progression)
+      setCurrentPosition(0)
+    } catch (error) {
+      console.error('Failed to generate specific progression:', error)
+    }
+  }
+
+  const handleProgressionChange = progressionIndex => {
+    setSelectedProgression(progressionIndex)
+  }
+
+  // Get available progressions based on current key type
+  const getAvailableProgressions = () => {
+    const isMajorType = ['ionian', 'lydian', 'mixolydian'].includes(keyType)
+    const isMinorType = ['aeolian', 'dorian', 'phrygian'].includes(keyType)
+
+    if (isMajorType) {
+      return commonProgressions.major
+    } else if (isMinorType) {
+      return commonProgressions.minor
+    } else {
+      // For other modes, mix both major and minor progressions
+      return [...commonProgressions.major, ...commonProgressions.minor]
     }
   }
 
@@ -298,10 +310,6 @@ const CircleOfFifths = () => {
                         <LinearScale />
                       </Button>
                     </ButtonGroup>
-
-                    <Button onClick={handleOpenPrompt} variant="contained">
-                      <AutoAwesome />
-                    </Button>
 
                     {!isAudioInitialized && (
                       <Box
@@ -395,133 +403,17 @@ const CircleOfFifths = () => {
                 onChordPreview={playChordPreview}
                 onMouseLeave={handleMouseLeave}
                 onDownloadMidi={handleDownloadMidi}
+                onRandomProgression={handleGenerateRandomProgression}
+                onSpecificProgression={handleGenerateSpecificProgression}
+                selectedProgression={selectedProgression}
+                onProgressionChange={handleProgressionChange}
+                availableProgressions={getAvailableProgressions()}
                 selectedKey={selectedKey}
                 keyType={keyType}
               />
             </CardContent>
           </Card>
         </Box>
-
-        {/* Chord Progression Generation Dialog */}
-        <Dialog
-          open={isPromptOpen}
-          onClose={handleClosePrompt}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>
-            Generate Chord Progression ({selectedKey} {keyType} /{' '}
-            {sequenceLength} chords)
-          </DialogTitle>
-          <DialogContent dividers>
-            <TextField
-              autoFocus
-              multiline
-              rows={4}
-              fullWidth
-              variant="outlined"
-              placeholder="Describe the chord progression you want... (e.g., 'sad and melancholic', 'uplifting pop progression', 'jazz-inspired with unexpected changes')"
-              value={promptText}
-              onChange={e => setPromptText(e.target.value)}
-            />
-
-            {/* Suggested Prompts */}
-            <Box sx={{ mt: 2 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: 2,
-                }}
-              >
-                {[
-                  {
-                    label: 'Dreamy Synthwave',
-                    description:
-                      'Create a dreamy synthwave progression with lush, atmospheric chords that evoke neon-lit cityscapes and nostalgic 80s vibes. Use warm, extended chords with subtle dissonance.',
-                  },
-                  {
-                    label: 'Modern Pop',
-                    description:
-                      'Generate a modern pop chord progression with catchy, radio-friendly changes that feel contemporary and accessible. Include some unexpected but pleasing harmonic turns.',
-                  },
-                  {
-                    label: 'Melancholic Indie',
-                    description:
-                      'Design a melancholic indie progression with bittersweet, introspective chords that capture feelings of nostalgia and wistful longing. Use minor tonalities and unexpected resolutions.',
-                  },
-                  {
-                    label: 'Upbeat Folk',
-                    description:
-                      'Create an upbeat folk progression with warm, organic chord changes that feel like sunshine and open roads. Use simple but effective major tonalities with gentle movement.',
-                  },
-                  {
-                    label: 'Dark Ambient',
-                    description:
-                      'Generate a dark ambient progression with mysterious, brooding chords that create an atmosphere of tension and uncertainty. Use minor keys with chromatic movement.',
-                  },
-                  {
-                    label: 'Jazz Fusion',
-                    description:
-                      'Design a jazz fusion progression with sophisticated, complex chord changes featuring extended harmonies, substitutions, and smooth voice leading that challenges and delights.',
-                  },
-                  {
-                    label: 'Nostalgic Ballad',
-                    description:
-                      'Create a nostalgic ballad progression with emotional, heart-tugging chord changes that tell a story of love, loss, and memory. Use classic progressions with modern touches.',
-                  },
-                  {
-                    label: 'Energetic Rock',
-                    description:
-                      'Generate an energetic rock progression with powerful, driving chord changes that pump up the energy and create momentum. Use strong root movements and dynamic shifts.',
-                  },
-                  {
-                    label: 'Chill Lo-fi',
-                    description:
-                      'Design a chill lo-fi progression with laid-back, smooth chord changes that create a relaxed, study-friendly atmosphere. Use jazz-influenced harmonies with a mellow feel.',
-                  },
-                  {
-                    label: 'Epic Cinematic',
-                    description:
-                      'Create an epic cinematic progression with grand, sweeping chord changes that build drama and emotion like a movie soundtrack. Use wide intervals and powerful resolutions.',
-                  },
-                ].map(suggestion => (
-                  <Chip
-                    clickable
-                    label={suggestion.label}
-                    key={suggestion.label}
-                    variant="contained"
-                    onClick={() => setPromptText(suggestion.description)}
-                    sx={theme => ({
-                      fontSize: theme.typography.body2.fontSize,
-                    })}
-                  ></Chip>
-                ))}
-              </Box>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClosePrompt} disabled={isGenerating}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleGenerateProgression}
-              variant="contained"
-              disabled={!promptText.trim() || isGenerating}
-              startIcon={
-                isGenerating ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : null
-              }
-              sx={theme => ({
-                paddingLeft: theme.spacing(2),
-                paddingRight: theme.spacing(2),
-              })}
-            >
-              {isGenerating ? 'Generating...' : 'Generate'}
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
     </ThemeProvider>
   )

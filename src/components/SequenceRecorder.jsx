@@ -1,10 +1,25 @@
-import { Box, Button, ButtonGroup, IconButton, Typography } from '@mui/material'
+import { useState } from 'react'
 import {
+  Box,
+  Button,
+  ButtonGroup,
+  IconButton,
+  Typography,
+  Popover,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material'
+import {
+  Casino,
   CleaningServices,
   Close,
   Download,
   PlayArrow,
+  Shuffle,
   Stop,
+  Piano,
 } from '@mui/icons-material'
 
 const SequenceRecorder = ({
@@ -21,9 +36,33 @@ const SequenceRecorder = ({
   onChordPreview,
   onMouseLeave,
   onDownloadMidi,
+  onRandomProgression,
+  onSpecificProgression,
+  selectedProgression,
+  onProgressionChange,
+  availableProgressions,
   selectedKey,
   keyType,
 }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const openPopover = Boolean(anchorEl)
+
+  const handleButtonClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClosePopover = () => {
+    setAnchorEl(null)
+  }
+
+  const handleProgressionSelect = progressionIndex => {
+    onProgressionChange(progressionIndex)
+    if (progressionIndex !== '' && progressionIndex !== null) {
+      onSpecificProgression(progressionIndex)
+    }
+    handleClosePopover()
+  }
+
   return (
     <Box>
       <Box sx={{ marginBottom: '24px' }}>
@@ -36,9 +75,54 @@ const SequenceRecorder = ({
             mb: 3,
           }}
         >
-          <Typography variant="h1">Chord recorder</Typography>
+          <Typography variant="h1">Recorder</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Button onClick={handleButtonClick} variant="contained">
+              <Piano />
+            </Button>
+
+            <Popover
+              open={openPopover}
+              anchorEl={anchorEl}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <List sx={{ minWidth: 180, maxHeight: 300, overflow: 'auto' }}>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => handleProgressionSelect('')}>
+                    <ListItemText
+                      primary="Select progression"
+                      sx={{ fontStyle: 'italic', opacity: 0.7 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                {availableProgressions.map((progression, index) => (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton
+                      onClick={() => handleProgressionSelect(index)}
+                    >
+                      <ListItemText
+                        primary={progression.name}
+                        secondary={progression.pattern.join(', ')}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Popover>
+
+            <Button onClick={onRandomProgression} variant="contained">
+              <Casino />
+            </Button>
+
             <ButtonGroup>
               {[4, 8, 12, 16].map(length => (
                 <Button
