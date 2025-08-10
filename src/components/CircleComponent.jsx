@@ -19,8 +19,8 @@ const CircleComponent = ({
   const keys = getCurrentKeys(keyType)
   const currentChords = getCurrentChords(keyType, selectedKey)
   const radius = 140
-  const centerX = 200
-  const centerY = 200
+  const centerX = 150
+  const centerY = 150
   const theme = useTheme()
   const chordRoots = currentChords.notes.map(chord => {
     let root = getChordRoot(chord)
@@ -32,9 +32,9 @@ const CircleComponent = ({
         display: 'flex',
         justifyContent: 'center',
         position: 'relative',
-        width: 400,
-        height: 400,
-        margin: '0 auto',
+        width: 300,
+        height: 300,
+        margin: '50px auto',
       }}
     >
       <Box
@@ -42,25 +42,11 @@ const CircleComponent = ({
           position: 'absolute',
           top: 0,
           left: 0,
-          width: 400,
-          height: 400,
+          width: 300,
+          height: 300,
           pointerEvents: 'none',
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: 400,
-            height: 400,
-            borderRadius: '50%',
-            boxShadow: `
-            5px 5px 10px #bfc6d1,
-            -5px -5px 10px #ffffff
-          `,
-          }}
-        />
         <Box
           sx={{
             position: 'absolute',
@@ -89,8 +75,8 @@ const CircleComponent = ({
       {currentChords.notes.map((chord, index) => {
         const chordRadius = radius - 60
         const selectedKeyIndex = keys.indexOf(selectedKey)
-        const selectedKeyAngle = selectedKeyIndex * 30 - 90 
-        const chordAngle = selectedKeyAngle + index * 51.43 
+        const selectedKeyAngle = selectedKeyIndex * 30 - 90
+        const chordAngle = selectedKeyAngle + index * 51.43
         const radian = (chordAngle * Math.PI) / 180
         const x = centerX + chordRadius * Math.cos(radian)
         const y = centerY + chordRadius * Math.sin(radian)
@@ -169,7 +155,7 @@ const CircleComponent = ({
         )
       })}
       {keys.map((key, index) => {
-        const angle = index * 30 - 90 
+        const angle = index * 30 - 90
         const radian = (angle * Math.PI) / 180
         const x = centerX + radius * Math.cos(radian)
         const y = centerY + radius * Math.sin(radian)
@@ -217,7 +203,7 @@ const CircleComponent = ({
           top: '50%',
           left: '50%',
           translate: '-50% -50%',
-          width: 140,
+          width: 100,
           textAlign: 'center',
           pointerEvents: 'none',
         }}
@@ -229,10 +215,11 @@ const CircleComponent = ({
         </Typography>
         <Typography
           variant="body2"
+          color="text.secondary"
           sx={{
-            fontWeight: 'medium',
-            color: '#6b7280',
             userSelect: 'none',
+            width: 100,
+            textAlign: 'center',
           }}
         >
           {modes[keyType].description}

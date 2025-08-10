@@ -69,50 +69,62 @@ const SequenceRecorder = ({
             mb: 3,
           }}
         >
-          <Typography variant="h2">Recorder</Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button onClick={handleButtonClick} variant="contained">
-              <Piano />
-            </Button>
-            <Popover
-              open={openPopover}
-              anchorEl={anchorEl}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            >
-              <List sx={{ minWidth: 180, maxHeight: 300, overflow: 'auto' }}>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={() => handleProgressionSelect('')}>
-                    <ListItemText
-                      primary="Select progression"
-                      sx={{ fontStyle: 'italic', opacity: 0.7 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                {availableProgressions.map((progression, index) => (
-                  <ListItem key={index} disablePadding>
-                    <ListItemButton
-                      onClick={() => handleProgressionSelect(index)}
-                    >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              flexWrap: 'wrap',
+              // justifyContent: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant="h2">Recorder</Typography>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+              <Button onClick={handleButtonClick} variant="contained">
+                <Piano />
+              </Button>
+              <Popover
+                open={openPopover}
+                anchorEl={anchorEl}
+                onClose={handleClosePopover}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+              >
+                <List sx={{ minWidth: 180, maxHeight: 300, overflow: 'auto' }}>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleProgressionSelect('')}>
                       <ListItemText
-                        primary={progression.name}
-                        secondary={progression.pattern.join(', ')}
+                        primary="Select progression"
+                        sx={{ fontStyle: 'italic', opacity: 0.7 }}
                       />
                     </ListItemButton>
                   </ListItem>
-                ))}
-              </List>
-            </Popover>
-            <Button onClick={onRandomProgression} variant="contained">
-              <Casino />
-            </Button>
+                  {availableProgressions.map((progression, index) => (
+                    <ListItem key={index} disablePadding>
+                      <ListItemButton
+                        onClick={() => handleProgressionSelect(index)}
+                      >
+                        <ListItemText
+                          primary={progression.name}
+                          secondary={progression.pattern.join(', ')}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Popover>
+              <Button onClick={onRandomProgression} variant="contained">
+                <Casino />
+              </Button>
+            </Box>
             <ButtonGroup>
               {[4, 8, 12, 16].map(length => (
                 <Button
@@ -124,30 +136,32 @@ const SequenceRecorder = ({
                 </Button>
               ))}
             </ButtonGroup>
-            <Button
-              onClick={onSequencePlay}
-              variant="contained"
-              disabled={sequence.every(chord => chord === null)}
-            >
-              {isPlaying ? <Stop /> : <PlayArrow />}
-            </Button>
-            <Button
-              onClick={onSequenceClear}
-              size="small"
-              variant="contained"
-              disabled={sequence.every(chord => chord === null)}
-            >
-              <CleaningServices />
-            </Button>
-            <Button
-              onClick={() => onDownloadMidi(selectedKey, keyType)}
-              size="small"
-              variant="contained"
-              color="primary"
-              disabled={sequence.every(chord => chord === null)}
-            >
-              <Download />
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+              <Button
+                onClick={onSequencePlay}
+                variant="contained"
+                disabled={sequence.every(chord => chord === null)}
+              >
+                {isPlaying ? <Stop /> : <PlayArrow />}
+              </Button>
+              <Button
+                onClick={onSequenceClear}
+                size="small"
+                variant="contained"
+                disabled={sequence.every(chord => chord === null)}
+              >
+                <CleaningServices />
+              </Button>
+              <Button
+                onClick={() => onDownloadMidi(selectedKey, keyType)}
+                size="small"
+                variant="contained"
+                color="primary"
+                disabled={sequence.every(chord => chord === null)}
+              >
+                <Download />
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -227,7 +241,7 @@ const SequenceRecorder = ({
                   </IconButton>
                 </>
               ) : (
-                <Typography>
+                <Typography variant="body2">
                   <b>Empty</b>
                 </Typography>
               )}

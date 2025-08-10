@@ -207,16 +207,15 @@ const CircleOfFifths = () => {
     <ThemeProvider theme={theme}>
       <Box
         sx={{
-          p: 3,
+          p: 2,
           minHeight: '100vh',
           backgroundColor: 'background.default',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
         }}
       >
-        <Box sx={{ width: 695 }}>
+        <Box sx={{ maxWidth: 695 }}>
           <Card sx={{ mb: 4 }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ marginBottom: '24px' }}>

@@ -55,7 +55,7 @@ const ChordProgressions = ({
         <Box
           sx={{
             display: 'flex',
-            gap: 1,
+            gap: 2,
             flexWrap: 'wrap',
             justifyContent: 'center',
           }}
