@@ -70,7 +70,7 @@ const CircleOfFifths = () => {
       setSelectedChord(romanNumeral)
     }
   }
-  const playChordOnly = async (chordName) => {
+  const playChordOnly = async chordName => {
     if (!isAudioInitialized) {
       await handleInitializeAudio()
     }
@@ -90,6 +90,9 @@ const CircleOfFifths = () => {
       setSequence(newSequence)
       setCurrentPosition((currentPosition + 1) % sequenceLength)
     }
+  }
+  const selectChord = romanNumeral => {
+    setSelectedChord(romanNumeral)
   }
   const changeSequenceLength = newLength => {
     const newSequence = Array(newLength).fill(null)
@@ -231,7 +234,7 @@ const CircleOfFifths = () => {
             <CardContent
               sx={theme => ({ padding: `${theme.spacing(4)} !important` })}
             >
-              <Box sx={{ marginBottom: 24 }}>
+              <Box sx={{ marginBottom: 2 }}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -335,6 +338,7 @@ const CircleOfFifths = () => {
                 onChordPreview={playChordPreview}
                 onChordPlayOnly={playChordOnly}
                 onChordRecord={recordChord}
+                onChordSelect={selectChord}
                 onMouseLeave={handleMouseLeave}
               />
             </CardContent>
