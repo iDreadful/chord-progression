@@ -2,7 +2,7 @@ import { Box, Button, Typography, useTheme } from '@mui/material'
 import { chordProgressions } from '../utils/musicData.js'
 import { getCurrentChords } from '../utils/musicUtils.js'
 
-const Legend = ({ selectedChord, keyType, selectedKey, onChordPreview, onChordPlayOnly, onChordRecord, onMouseLeave }) => {
+const Legend = ({ selectedChord, keyType, selectedKey, onChordPreview, onChordPlayOnly, onChordRecord, onChordSelect, onMouseLeave }) => {
   const theme = useTheme()
   if (!selectedChord) {
     return (
@@ -97,7 +97,10 @@ const Legend = ({ selectedChord, keyType, selectedKey, onChordPreview, onChordPl
                   variant="contained"
                   onMouseEnter={() => onChordPlayOnly && onChordPlayOnly(romanToChordName[chord] || chord)}
                   onMouseLeave={onMouseLeave}
-                  onClick={() => onChordRecord && onChordRecord(romanToChordName[chord] || chord, chord)}
+                  onClick={() => {
+                    onChordRecord && onChordRecord(romanToChordName[chord] || chord, chord)
+                    onChordSelect && onChordSelect(chord)
+                  }}
                   sx={{
                     width: 36,
                     height: 36,
@@ -164,7 +167,10 @@ const Legend = ({ selectedChord, keyType, selectedKey, onChordPreview, onChordPl
                   variant="contained"
                   onMouseEnter={() => onChordPlayOnly && onChordPlayOnly(romanToChordName[chord] || chord)}
                   onMouseLeave={onMouseLeave}
-                  onClick={() => onChordRecord && onChordRecord(romanToChordName[chord] || chord, chord)}
+                  onClick={() => {
+                    onChordRecord && onChordRecord(romanToChordName[chord] || chord, chord)
+                    onChordSelect && onChordSelect(chord)
+                  }}
                   sx={{
                     width: 36,
                     height: 36,
