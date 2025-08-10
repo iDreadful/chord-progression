@@ -27,6 +27,7 @@ import CircleComponent from './components/CircleComponent.jsx'
 import ChordProgressions from './components/ChordProgressions.jsx'
 import ModeSelector from './components/ModeSelector.jsx'
 import SequenceRecorder from './components/SequenceRecorder.jsx'
+import Legend from './components/Legend.jsx'
 import theme from './theme'
 const CircleOfFifths = () => {
   const [selectedKey, setSelectedKey] = useState('C')
@@ -68,6 +69,16 @@ const CircleOfFifths = () => {
     if (romanNumeral) {
       setSelectedChord(romanNumeral)
     }
+  }
+  const playChordOnly = async (chordName) => {
+    if (!isAudioInitialized) {
+      await handleInitializeAudio()
+    }
+    if (!synth || !isAudioInitialized) {
+      console.log('Audio not ready yet')
+      return
+    }
+    playChord(synth, chordName)
   }
   const handleMouseLeave = () => {
     setLastHoveredChord(null)
@@ -216,9 +227,11 @@ const CircleOfFifths = () => {
         }}
       >
         <Box sx={{ maxWidth: 695 }}>
-          <Card sx={{ mb: 4 }}>
-            <CardContent sx={{ p: 4 }}>
-              <Box sx={{ marginBottom: '24px' }}>
+          <Card sx={{ mb: 2 }}>
+            <CardContent
+              sx={theme => ({ padding: `${theme.spacing(4)} !important` })}
+            >
+              <Box sx={{ marginBottom: 24 }}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -315,6 +328,15 @@ const CircleOfFifths = () => {
                   onKeyClick={handleKeyClick}
                 />
               )}
+              <Legend
+                selectedChord={selectedChord}
+                keyType={keyType}
+                selectedKey={selectedKey}
+                onChordPreview={playChordPreview}
+                onChordPlayOnly={playChordOnly}
+                onChordRecord={recordChord}
+                onMouseLeave={handleMouseLeave}
+              />
             </CardContent>
           </Card>
           <Card>
