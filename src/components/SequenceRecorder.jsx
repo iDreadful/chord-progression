@@ -168,9 +168,10 @@ const SequenceRecorder = ({
       <Box sx={{ marginTop: 4 }}>
         <Box
           sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(8, minmax(10px, 1fr))',
+            display: 'flex',
+            flexWrap: 'wrap',
             gap: 2,
+            justifyContent: 'center',
           }}
         >
           {sequence.map((chord, index) => (
@@ -185,6 +186,8 @@ const SequenceRecorder = ({
                 cursor: 'pointer',
                 aspectRatio: '1 / 1',
                 backgroundColor: '#e2e8f0',
+                height: 'calc(12.5% - 14px)',
+                width: 'calc(12.5% - 14px)',
                 border: 'none',
                 color:
                   playbackPosition === index
