@@ -26,6 +26,7 @@ import { downloadMidiSequence } from './utils/midiUtils.js'
 import CircleComponent from './components/CircleComponent.jsx'
 import ChordProgressions from './components/ChordProgressions.jsx'
 import ModeSelector from './components/ModeSelector.jsx'
+import KeySelector from './components/KeySelector.jsx'
 import SequenceRecorder from './components/SequenceRecorder.jsx'
 import Legend from './components/Legend.jsx'
 import theme from './theme'
@@ -310,6 +311,12 @@ const CircleOfFifths = () => {
                   />
                 </Box>
               </Box>
+
+              <KeySelector
+                keyType={keyType}
+                selectedKey={selectedKey}
+                onKeyClick={handleKeyClick}
+              />
               {activeView === 'circle' ? (
                 <CircleComponent
                   keyType={keyType}

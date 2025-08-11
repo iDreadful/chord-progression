@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme } from '@mui/material'
+import { Box, Button, lighten, Typography, useTheme } from '@mui/material'
 import {
   getCurrentKeys,
   getCurrentChords,
@@ -59,21 +59,9 @@ const CircleComponent = ({
             border: '1px solid rgba(0, 0, 0, 0.05)',
           }}
         />
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: 160,
-            height: 160,
-            borderRadius: '50%',
-            translate: '-50% -50%',
-            border: '1px solid rgba(0, 0, 0, 0.05)',
-          }}
-        />
       </Box>
       {currentChords.notes.map((chord, index) => {
-        const chordRadius = radius - 60
+        const chordRadius = radius
         const selectedKeyIndex = keys.indexOf(selectedKey)
         const selectedKeyAngle = selectedKeyIndex * 30 - 90
         const chordAngle = selectedKeyAngle + index * 51.43
@@ -107,11 +95,11 @@ const CircleComponent = ({
             variant="contained"
             sx={{
               position: 'absolute',
-              top: y - 18,
-              left: x - 18,
-              width: 36,
-              height: 36,
-              minWidth: 36,
+              top: y - 30,
+              left: x - 30,
+              width: 60,
+              height: 60,
+              minWidth: 60,
               borderRadius: '50%',
               background: backgroundColor,
               border: 'none',
@@ -154,49 +142,7 @@ const CircleComponent = ({
           </Button>
         )
       })}
-      {keys.map((key, index) => {
-        const angle = index * 30 - 90
-        const radian = (angle * Math.PI) / 180
-        const x = centerX + radius * Math.cos(radian)
-        const y = centerY + radius * Math.sin(radian)
-        const isSelected = key === selectedKey
-        const keyRoot = key.replace('m', '')
-        const isChordRoot = chordRoots.includes(keyRoot)
-        let backgroundColor = '#ffffff'
-        let textColor = '#374151'
-        if (isSelected) {
-          backgroundColor = theme.palette.info.main
-          textColor = '#ffffff'
-        } else if (isChordRoot) {
-          backgroundColor = theme.palette.warning.main
-          textColor = '#374151'
-        }
-        return (
-          <Button
-            key={key}
-            variant="contained"
-            sx={{
-              position: 'absolute',
-              top: y - 25,
-              left: x - 25,
-              width: 50,
-              height: 50,
-              minWidth: 50,
-              borderRadius: '50%',
-              background: backgroundColor,
-              cursor: 'pointer',
-              '&:hover': {
-                background: backgroundColor,
-              },
-            }}
-            onClick={() => onKeyClick(key)}
-          >
-            <Typography sx={{ color: textColor, userSelect: 'none' }}>
-              <b>{key}</b>
-            </Typography>
-          </Button>
-        )
-      })}
+
       <Box
         sx={{
           position: 'absolute',
@@ -208,7 +154,7 @@ const CircleComponent = ({
           pointerEvents: 'none',
         }}
       >
-        <Typography>
+        <Typography variant="h2">
           <b>
             {selectedKey} {modes[keyType].name}
           </b>
@@ -216,11 +162,7 @@ const CircleComponent = ({
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{
-            userSelect: 'none',
-            width: 100,
-            textAlign: 'center',
-          }}
+          sx={{ width: 100, textAlign: 'center' }}
         >
           {modes[keyType].description}
         </Typography>

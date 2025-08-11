@@ -19,39 +19,17 @@ const ChordProgressions = ({
   const theme = useTheme()
   return (
     <Box>
-      <Box sx={{ mb: 3 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
-        >
-          {keys.map(key => (
-            <Button
-              key={key}
-              variant={key === selectedKey ? 'contained' : 'outlined'}
-              onClick={() => onKeyClick(key)}
-              sx={{ width: 45 }}
-            >
-              {key}
-            </Button>
-          ))}
-        </Box>
-      </Box>
       <Box sx={{ mb: 4 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            textAlign: 'center',
-            mb: 2,
-            color: '#1f2937',
-            fontWeight: 'bold',
-          }}
-        >
-          {selectedKey} {modes[keyType].name}
-        </Typography>
+        <Box sx={{ textAlign: 'center', mb: 2 }}>
+          <Typography variant="h2">
+            <b>
+              {selectedKey} {modes[keyType].name}
+            </b>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {modes[keyType].description}
+          </Typography>
+        </Box>
         <Box
           sx={{
             display: 'flex',
