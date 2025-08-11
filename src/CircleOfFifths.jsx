@@ -5,29 +5,31 @@ import {
   ButtonGroup,
   Card,
   CardContent,
-  IconButton,
   ThemeProvider,
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
 import { initializeAudio, playChord } from './utils/audioUtils.js'
+import { downloadMidiSequence } from './utils/midiUtils.js'
 import {
-  getCurrentKeys,
-  generateRandomProgression,
-  generateSpecificProgression,
-} from './utils/musicUtils.js'
-import {
+  commonProgressions,
   majorKeys,
   minorKeys,
   modalKeys,
-  commonProgressions,
 } from './utils/musicData.js'
-import { downloadMidiSequence } from './utils/midiUtils.js'
-import CircleComponent from './components/CircleComponent.jsx'
-import ChordProgressions from './components/ChordProgressions.jsx'
-import ModeSelector from './components/ModeSelector.jsx'
-import SequenceRecorder from './components/SequenceRecorder.jsx'
-import Legend from './components/Legend.jsx'
+import {
+  generateRandomProgression,
+  generateSpecificProgression,
+  getCurrentKeys,
+} from './utils/musicUtils.js'
+import {
+  ChordProgressions,
+  CircleComponent,
+  KeySelector,
+  Legend,
+  ModeSelector,
+  SequenceRecorder,
+} from './components'
 import theme from './theme'
 const CircleOfFifths = () => {
   const [selectedKey, setSelectedKey] = useState('C')
@@ -310,6 +312,12 @@ const CircleOfFifths = () => {
                   />
                 </Box>
               </Box>
+
+              <KeySelector
+                keyType={keyType}
+                selectedKey={selectedKey}
+                onKeyClick={handleKeyClick}
+              />
               {activeView === 'circle' ? (
                 <CircleComponent
                   keyType={keyType}

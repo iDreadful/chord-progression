@@ -192,6 +192,7 @@ const SequenceRecorder = ({
                 sx={theme => ({
                   width: '100%',
                   height: '100%',
+                  flexDirection: 'column',
                   backgroundColor: '#e2e8f0',
                   color:
                     playbackPosition === index

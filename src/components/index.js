@@ -1,4 +1,6 @@
 export { default as CircleComponent } from './CircleComponent.jsx'
 export { default as ChordProgressions } from './ChordProgressions.jsx'
 export { default as ModeSelector } from './ModeSelector.jsx'
+export { default as KeySelector } from './KeySelector.jsx'
 export { default as SequenceRecorder } from './SequenceRecorder.jsx'
+export { default as Legend } from './Legend.jsx'
