@@ -1,24 +1,14 @@
+import { Box, Button, Typography, useTheme } from '@mui/material'
+import { modes } from '../utils/musicData.js'
 import {
-  alpha,
-  Box,
-  Button,
-  lighten,
-  Typography,
-  useTheme,
-} from '@mui/material'
-import {
-  getCurrentKeys,
   getCurrentChords,
-  getChordRoot,
-  normalizeNote,
+  getCurrentKeys,
   getNextChordSuggestions,
 } from '../utils/musicUtils.js'
-import { modes } from '../utils/musicData.js'
 const CircleComponent = ({
   keyType,
   selectedKey,
   selectedChord,
-  onKeyClick,
   onChordPreview,
   onChordRecord,
   onMouseLeave,
@@ -29,10 +19,6 @@ const CircleComponent = ({
   const centerX = 150
   const centerY = 150
   const theme = useTheme()
-  const chordRoots = currentChords.notes.map(chord => {
-    let root = getChordRoot(chord)
-    return normalizeNote(root)
-  })
 
   const getChordPosition = index => {
     const selectedKeyIndex = keys.indexOf(selectedKey)
