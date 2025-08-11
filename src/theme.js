@@ -131,6 +131,13 @@ const theme = createTheme({
             inset 2px 2px 4px #bfc6d1,
             inset -2px -2px 4px #ffffff
             `,
+            '&:active': {
+              backgroundColor: '#e2e8f0',
+              boxShadow: `
+            inset 5px 5px 4px #bfc6d1,
+            inset -5px -5px 4px #ffffff
+            `,
+            },
           },
         },
       },
