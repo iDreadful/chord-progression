@@ -243,7 +243,7 @@ const CircleOfFifths = () => {
                     mb: 3,
                   }}
                 >
-                  <Typography variant="h2">Chord progression helper</Typography>
+                  <Typography variant="h2">Chords</Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <ButtonGroup>
                       <Button

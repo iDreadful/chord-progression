@@ -75,7 +75,6 @@ const SequenceRecorder = ({
               alignItems: 'center',
               gap: 2,
               flexWrap: 'wrap',
-              // justifyContent: 'center',
               justifyContent: 'space-between',
             }}
           >
@@ -175,80 +174,79 @@ const SequenceRecorder = ({
           }}
         >
           {sequence.map((chord, index) => (
-            <Button
-              key={index}
-              elevation={currentPosition === index ? 4 : 1}
-              sx={theme => ({
-                display: 'flex',
-                flexDirection: 'column',
-                padding: theme.spacing(2),
-                textAlign: 'center',
-                cursor: 'pointer',
-                aspectRatio: '1 / 1',
-                backgroundColor: '#e2e8f0',
+            <Box
+              sx={{
+                position: 'relative',
                 height: 'calc(12.5% - 14px)',
                 width: 'calc(12.5% - 14px)',
-                border: 'none',
-                color:
-                  playbackPosition === index
-                    ? theme.palette.success.main
-                    : currentPosition === index
-                    ? theme.palette.warning.main
-                    : chord
-                    ? theme.palette.info.main
-                    : '#64748b',
-                borderRadius: 16,
-                transition: 'all 0.2s ease-in-out',
-                boxShadow:
-                  currentPosition === index || playbackPosition === index
-                    ? `4px 4px 8px #bfc6d1, -4px -4px 8px #ffffff`
-                    : `inset 3px 3px 6px #bfc6d1, inset -3px -3px 6px #ffffff`,
-                '&:active': {
-                  boxShadow: `inset 2px 2px 4px #bfc6d1, inset -2px -2px 4px #ffffff`,
-                },
-              })}
-              onMouseEnter={() =>
-                chord && onChordPreview(chord.chord, chord.roman)
-              }
-              onMouseLeave={onMouseLeave}
-              onClick={() => onPositionChange(index)}
+                aspectRatio: '1 / 1',
+              }}
             >
-              {chord ? (
-                <>
-                  <Typography sx={{ lineHeight: 1 }}>
-                    <b>{chord.roman}</b>
+              <Button
+                key={index}
+                variant={
+                  currentPosition === index || playbackPosition === index
+                    ? 'contained'
+                    : 'outlined'
+                }
+                sx={theme => ({
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#e2e8f0',
+                  color:
+                    playbackPosition === index
+                      ? theme.palette.success.main
+                      : currentPosition === index
+                      ? theme.palette.warning.main
+                      : chord
+                      ? theme.palette.info.main
+                      : '#64748b',
+                })}
+                onMouseEnter={() =>
+                  chord && onChordPreview(chord.chord, chord.roman)
+                }
+                onMouseLeave={onMouseLeave}
+                onClick={() => onPositionChange(index)}
+              >
+                {chord ? (
+                  <>
+                    <Typography sx={{ lineHeight: 1 }}>
+                      <b>{chord.roman}</b>
+                    </Typography>
+                    <Typography>
+                      <b>{chord.chord}</b>
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="body2">
+                    <b>Empty</b>
                   </Typography>
-                  <Typography>
-                    <b>{chord.chord}</b>
-                  </Typography>
-                  <IconButton
-                    size="small"
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'error.main',
-                      color: 'white',
-                      width: 20,
-                      height: 20,
-                      '&:hover': {
-                        backgroundColor: 'error.dark',
-                      },
-                    }}
-                    onClick={e => {
-                      e.stopPropagation()
-                      onChordRemove(index)
-                    }}
-                  >
-                    <Close sx={{ fontSize: 16 }} />
-                  </IconButton>
-                </>
-              ) : (
-                <Typography variant="body2">
-                  <b>Empty</b>
-                </Typography>
+                )}
+              </Button>
+              {chord && (
+                <IconButton
+                  size="small"
+                  sx={{
+                    position: 'absolute',
+                    top: -10,
+                    right: -10,
+                    backgroundColor: 'error.main',
+                    color: 'white',
+                    width: 20,
+                    height: 20,
+                    '&:hover': {
+                      backgroundColor: 'error.dark',
+                    },
+                  }}
+                  onClick={e => {
+                    e.stopPropagation()
+                    onChordRemove(index)
+                  }}
+                >
+                  <Close sx={{ fontSize: 16 }} />
+                </IconButton>
               )}
-            </Button>
+            </Box>
           ))}
         </Box>
       </Box>
