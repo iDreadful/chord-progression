@@ -36,6 +36,7 @@ const theme = createTheme({
       secondary: '#64748b',
     },
   },
+  spacing: 5,
   shape: {
     borderRadius: 20,
   },
